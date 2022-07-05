@@ -1,7 +1,28 @@
 {
     "@@locale": "es",
-    "counterAppBarTitle": "Contador",
-    "@counterAppBarTitle": {
-        "description": "Texto mostrado en la AppBar de la página del contador"
+    "recipeSearcherTitle": "My Recipes",
+    "@recipeSearcherTitle": {
+        "description": "Text shown in the title of the Recipe Searcher Page"
+    },
+    "recipeSearcherSubtitle": "Who are you looking for? Search for a Recipe by name or category",
+    "@recipeSearcherSubtitle": {
+        "description": "Text shown under the title of the the Recipe Searcher Page"
+    },
+    "recipeSearcherTextLabel": "Recipe or category",
+    "@recipeSearcherTextLabel": {
+        "description": "Label text shown in the text input field of the Recipe Searcher Page"
+    },
+    "recipeListInitial": "What do we eat?",
+    "@recipeListInitial": {
+        "description": "Text shown in the recipe list when its status is initial"
+    },
+    "recipeListNotFoundQuery": "No result found to \"{query}\"",
+    "@recipeListNotFoundQuery": {
+        "description": "Text shown in the recipe list when query is not found",
+        "placeholders": {
+            "query": {
+                "description": "The query of the search"
+            }
+        }
     }
 }
