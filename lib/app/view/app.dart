@@ -7,6 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:my_recipes/l10n/l10n.dart';
+import 'package:my_recipes/recipe_overview/recipe_overview.dart';
 import 'package:my_recipes/recipe_searcher/recipe_searcher.dart';
 
 class App extends StatelessWidget {
@@ -15,6 +16,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         appBarTheme: const AppBarTheme(color: Color(0xFF13B9FF)),
         colorScheme: ColorScheme.fromSwatch(
@@ -23,7 +25,7 @@ class App extends StatelessWidget {
       ),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const RecipeSearcherPage(),
+      home: const RecipeOverviewPage(),
     );
   }
 }
