@@ -30,7 +30,7 @@ class BigOvenApiClient {
 
   
   /// Finds a [Recipe] `/recipe?query=(query)&page=(page)&rpp=(rpp)&api_key=(apiKey)`.
-  Future<List<Recipe>> search({
+  Future<SearchResult> search({
     required String query,
     int page = 1,
   }) async {
@@ -55,6 +55,9 @@ class BigOvenApiClient {
       throw RecipeNotFoundFailure();
     }
 
-    return List<Recipe>.from(jsonResponse.map((e) => Recipe.fromJson));
+    final recipes = 
+      List<Recipe>.from(jsonResponse.map((e) => Recipe.fromJson));
+
+    return SearchResult(recipes: recipes);
   }
 }

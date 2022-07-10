@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_recipes/l10n/l10n.dart';
-import 'package:my_recipes/recipe_searcher/recipe_searcher.dart';
+import 'package:my_recipes/search/search.dart';
 
 class RecipeSearcherPage extends StatelessWidget {
   const RecipeSearcherPage({Key? key}) : super(key: key);

@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_recipes/l10n/l10n.dart';
 import 'package:my_recipes/recipe_overview/recipe_overview.dart';
-import 'package:my_recipes/recipe_searcher/recipe_searcher.dart';
+import 'package:my_recipes/search/search.dart';
 
 class App extends StatelessWidget {
   const App({super.key});

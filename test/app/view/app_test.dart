@@ -7,7 +7,7 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_recipes/app/app.dart';
-import 'package:my_recipes/recipe_searcher/recipe_searcher.dart';
+import 'package:my_recipes/search/search.dart';
 
 void main() {
   group('App', () {

@@ -1,2 +1,3 @@
-export 'recipe/recipe.dart';
-export 'recipe/user.dart';
+export 'recipe.dart';
+export 'search_result.dart';
+export 'user.dart';
