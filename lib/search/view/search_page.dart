@@ -2,20 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_recipes/l10n/l10n.dart';
 import 'package:my_recipes/search/search.dart';
+import 'package:recipe_repository/recipe_repository.dart';
 
-class RecipeSearcherPage extends StatelessWidget {
-  const RecipeSearcherPage({Key? key}) : super(key: key);
+class SearchPage extends StatelessWidget {
+  const SearchPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => RecipeSearcherCubit(),
-      child: _RecipeSearcherView(),
+      create: (context) 
+          => SearchBloc(recipeRepository: context.read<RecipeRepository>()),
+      child: _SearchView(),
     );
   }
 }
 
-class _RecipeSearcherView extends StatelessWidget {
+class _SearchView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -35,9 +37,9 @@ class _RecipeSearcherView extends StatelessWidget {
             const SizedBox(height: 10),
             Text(l10n.recipeSearcherSubtitle),
             const SizedBox(height: 10),
-            _RecipeSearcherForm(),
+            _SearchForm(),
             const SizedBox(height: 10),
-            _RecipeSearcherBody(),
+            _SearchBody(),
           ],
         ),
       ),
@@ -45,7 +47,7 @@ class _RecipeSearcherView extends StatelessWidget {
   }
 }
 
-class _RecipeSearcherForm extends StatelessWidget {
+class _SearchForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -54,43 +56,29 @@ class _RecipeSearcherForm extends StatelessWidget {
     return TextField(
       controller: _textController,
       onChanged: (text) => 
-        context.read<RecipeSearcherCubit>().queryChanged(text),
+        context.read<SearchBloc>().add(QueryChanged(query: text)),
       decoration: InputDecoration(
         filled: true,
         labelText: l10n.recipeSearcherTextLabel,
-        prefixIcon: IconButton(
-          onPressed: () => 
-              context.read<RecipeSearcherCubit>().search(), 
-          icon: const Icon(Icons.search_rounded),
-        ),
+        prefixIcon: const Icon(Icons.search_rounded),
         border: InputBorder.none,
-        suffixIcon: IconButton(
-          onPressed: () => {
-            context.read<RecipeSearcherCubit>().queryChanged(''), 
-            _textController.clear(),
-          },
-          icon: const Icon(Icons.delete_sweep_rounded),
-        ),
+        suffixIcon: const Icon(Icons.delete_sweep_rounded),
       ),
     );
   }
 }
 
-class _RecipeSearcherBody extends StatelessWidget {
+class _SearchBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    return BlocBuilder<RecipeSearcherCubit, RecipeSearcherState>(
-      buildWhen: (previous, current) => 
-          previous.status != current.status,
+    return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
-        final status = state.status;
-
-        return status == RecipeSearcherStatus.success
+        return state is SearchStateSuccess
             ? _RecipeList()
             : Center(
-              child: status == RecipeSearcherStatus.loading
+              child: state is SearchStateLoading
                   ? const CircularProgressIndicator()
                   : Column(
                     children: <Widget>[
@@ -99,9 +87,9 @@ class _RecipeSearcherBody extends StatelessWidget {
                         size: 150,
                       ),
                       const SizedBox(height: 8),
-                      Text( status == RecipeSearcherStatus.initial
+                      Text( state is SearchStateEmpty
                           ? l10n.recipeListInitial
-                          : l10n.recipeListNotFoundQuery(state.query),
+                          : l10n.recipeListNotFoundQuery('query'),
                       ),
                     ],
                   ),

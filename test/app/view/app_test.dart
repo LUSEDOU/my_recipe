@@ -6,14 +6,24 @@
 // https://opensource.org/licenses/MIT.
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:my_recipes/app/app.dart';
 import 'package:my_recipes/search/search.dart';
+import 'package:recipe_repository/recipe_repository.dart';
+
+class MockRecipeRepository extends Mock implements RecipeRepository {}
 
 void main() {
+  late RecipeRepository recipeRepository;
+
+  setUp(() {
+    recipeRepository = MockRecipeRepository();
+  });
+
   group('App', () {
     testWidgets('renders CounterPage', (tester) async {
-      await tester.pumpWidget(const App());
-      expect(find.byType(RecipeSearcherPage), findsOneWidget);
+      await tester.pumpWidget(App(recipeRepository: recipeRepository));
+      expect(find.byType(SearchPage), findsOneWidget);
     });
   });
 }

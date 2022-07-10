@@ -21,6 +21,7 @@ dependencies:
     path: packages/local_storage
   recipe_repository:
     path: packages/recipe_repository
+  stream_transform: ^2.0.0
 
 dev_dependencies:
   bloc_test: ^9.0.3
