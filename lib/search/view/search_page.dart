@@ -5,7 +5,7 @@ import 'package:my_recipes/search/search.dart';
 import 'package:recipe_repository/recipe_repository.dart';
 
 class SearchPage extends StatelessWidget {
-  const SearchPage({Key? key}) : super(key: key);
+  const SearchPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,27 +20,36 @@ class SearchPage extends StatelessWidget {
 class _SearchView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: Column(
-          children: <Widget>[
-            const SizedBox(height: 80),
-            Text(
-              l10n.recipeSearcherTitle,
-              style: textTheme.headline2,
-            ),
-            const SizedBox(height: 10),
-            Text(l10n.recipeSearcherSubtitle),
-            const SizedBox(height: 10),
-            _SearchForm(),
-            const SizedBox(height: 10),
-            _SearchBody(),
-          ],
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+          child: Column(
+            children: <Widget>[
+              SizedBox(height: size.height * 0.03),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  l10n.recipeSearcherTitle,
+                  style: textTheme.headlineMedium,
+                ),
+              ),
+              SizedBox(height: size.height * 0.01,),
+              Text(
+                l10n.recipeSearcherSubtitle,
+                style: textTheme.subtitle1,
+              ),
+              SizedBox(height: size.height * 0.02),
+              _SearchForm(),
+              const SizedBox(height: 10),
+              _SearchBody(),
+            ],
+          ),
         ),
       ),
     );
@@ -57,12 +66,17 @@ class _SearchForm extends StatelessWidget {
       controller: _textController,
       onChanged: (text) => 
         context.read<SearchBloc>().add(QueryChanged(query: text)),
+      autocorrect: false,
       decoration: InputDecoration(
         filled: true,
-        labelText: l10n.recipeSearcherTextLabel,
+        hintText: l10n.recipeSearcherTextLabel,
         prefixIcon: const Icon(Icons.search_rounded),
         border: InputBorder.none,
-        suffixIcon: const Icon(Icons.delete_sweep_rounded),
+        suffixIcon: IconButton(
+          onPressed: () => 
+              context.read<SearchBloc>().add(const QueryChanged(query: '')), 
+          icon: const Icon(Icons.cancel_rounded),
+        ),
       ),
     );
   }
@@ -75,25 +89,25 @@ class _SearchBody extends StatelessWidget {
 
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
-        return state is SearchStateSuccess
-            ? _RecipeList()
-            : Center(
-              child: state is SearchStateLoading
-                  ? const CircularProgressIndicator()
-                  : Column(
-                    children: <Widget>[
-                      const Icon(
-                        Icons.food_bank,
-                        size: 150,
-                      ),
-                      const SizedBox(height: 8),
-                      Text( state is SearchStateEmpty
-                          ? l10n.recipeListInitial
-                          : l10n.recipeListNotFoundQuery('query'),
-                      ),
-                    ],
-                  ),
-            );
+        if (state is SearchStateSuccess) {
+          return Expanded(child: _RecipeList());
+        }
+
+        if (state is SearchStateLoading) {
+          return const CircularProgressIndicator();
+        }
+
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Icon(Icons.restaurant_rounded),
+            Text(
+              state is SearchStateEmpty
+                  ? l10n.recipeListInitial
+                  : l10n.recipeListNotFoundQuery(state.props),
+            )
+          ],
+        );
       },
     );
   }
