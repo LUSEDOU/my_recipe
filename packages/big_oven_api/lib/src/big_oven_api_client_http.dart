@@ -1,31 +1,25 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
 import 'package:big_oven_api/big_oven_api.dart';
-import 'package:dio/dio.dart';
-
-/// Exception thrown when recipeSearch fails.
-class RecipeRequestFailure implements Exception {}
-
-/// Exception thrown when the provided recipe is not found.
-class RecipeNotFoundFailure implements Exception {}
+import 'package:http/http.dart' as http;
 
 /// {@template big_oven_api_client}
 /// Dart API client which wraps the [BigOven Api](https://api2.bigoven.com/)
 /// {@endtemplate}
-class BigOvenApiClient {
+class BigOvenApiClientHTTP {
   /// {@macro big_oven_api_client}
-  BigOvenApiClient({
-    Dio? dio, 
-    this.apiKey = '?',
-  })  : _dio = dio ?? Dio(BaseOptions(baseUrl: _baseURL));
-  
-  final Dio _dio;
+  BigOvenApiClientHTTP({http.Client? httpClient, 
+      this.apiKey = 'glFUKikehWjLW900etpS564VgIzOWSW5'})
+      : _httpClient = httpClient ?? http.Client();
+
+  final http.Client _httpClient;
 
   /// The API_key
   final String apiKey;
 
-  static const _baseURL = 'api.bigoven.com';
+  static const _baseUrl = 'api.bigoven.com';
   static const _recipeEndPoint = '/recipes';
   static const _headers = {'Content-Type': 'application/json'};
 
@@ -40,25 +34,20 @@ class BigOvenApiClient {
     };
 
     log('Initialize request');
-    final request = Uri.https(
-      _baseURL, 
+    final url = Uri.https(
+      _baseUrl, 
       _recipeEndPoint,
       queryParameters,
     );
-    log('request: $_baseURL$_recipeEndPoint$queryParameters');
+    log('url: $url');
 
-    final response = await _dio.getUri<String>(
-      request,
-      options: Options(headers: _headers),
-    );
+    final response = await _httpClient.get(url, headers: _headers);
+    final results = json.decode(response.body) as Map<String, dynamic>;
 
     if (response.statusCode != 200) {
-      throw SearchResultError(message: response.data.toString());
+      log('response not 200');
+      throw SearchResultError.fromJson(results);
     }
-
-    final results 
-      = json.decode(response.data.toString()) as Map<String, dynamic>;
-
     return SearchResult.fromJson(results);
   }
 }

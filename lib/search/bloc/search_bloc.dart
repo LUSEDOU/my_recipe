@@ -32,10 +32,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
     try {
       final result = await recipeRepository.getRecipes(query, 1);
-      emit(SearchStateSuccess(recipes: result.recipes));
+      emit(SearchStateSuccess(result.recipes));
     } catch (error) {
-      emit( error is RecipeNotFoundFailure
-          ? const SearchStateSuccess()
+      emit( error is SearchResultError
+          ? SearchStateFailure(error.message)
           : SearchStateFailure(error.toString()),
       );
     }

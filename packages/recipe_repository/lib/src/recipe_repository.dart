@@ -8,23 +8,22 @@ import 'package:recipe_repository/recipe_repository.dart';
 class RecipeRepository {
   /// {@macro recipe_repository}
   RecipeRepository({
-    BigOvenApiClient? bigOvenApiClient,
+    BigOvenApiClientHTTP? bigOvenApiClient,
     LocalStorage? localStorage,
-  }) : _bigOvenApiClient = bigOvenApiClient ?? BigOvenApiClient(),
+  }) : _bigOvenApiClient = bigOvenApiClient ?? BigOvenApiClientHTTP(),
        _localStorage = localStorage ?? LocalStorage();
 
-  final BigOvenApiClient _bigOvenApiClient;
+  final BigOvenApiClientHTTP _bigOvenApiClient;
   final LocalStorage _localStorage;
 
   /// Get a list of [Search]
-  Future<Search> getRecipes(String query, int pages) async {
-    if (_localStorage.has(query)) {
-      return _localStorage.get(query) as Search;
+  Future<SearchResult> getRecipes(String query, int pages) async {
+    if (_localStorage.has('$query$pages')) {
+      return _localStorage.get('$query$pages') as SearchResult;
     }
-
     final result = await _bigOvenApiClient.search(query: query, page: pages);
-    await _localStorage.write(query, result);
+    await _localStorage.write('$query$pages', result);
 
-    return Search(recipes: result.recipes);
+    return result;
   }
 }

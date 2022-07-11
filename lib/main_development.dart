@@ -16,7 +16,7 @@ Future<void> main() async {
   await localStorage.init();
 
   final recipeRepository = RecipeRepository(
-    bigOvenApiClient: BigOvenApiClient(
+    bigOvenApiClient: BigOvenApiClientHTTP(
       apiKey: 'glFUKikehWjLW900etpS564VgIzOWSW5',
     ),
     localStorage: localStorage,

@@ -23,4 +23,7 @@ class User with _$User {
   /// Converts a [Map<String, dynamic>] into a [User] instance.
   factory User.fromJson(Map<String, dynamic> json) 
       => _$UserFromJson(json);
+
+  /// A empty user.
+  static const empty = User(user: '', thumbnail: '');
 }

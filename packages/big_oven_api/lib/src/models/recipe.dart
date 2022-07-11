@@ -32,16 +32,16 @@ class Recipe with _$Recipe{
     required String thumbnail,
 
     /// The cuisine of the recipe. Can be null.
-    @JsonKey(name: 'Cuisine')
-    required String? cuisine,
+    @JsonKey(name: 'Cuisine', defaultValue: '')
+    required String cuisine,
 
     /// The category of the recipe. Can be null.
-    @JsonKey(name: 'Category')
-    required String? category,
+    @JsonKey(name: 'Category', defaultValue: '')
+    required String category,
 
     /// The subcategory of the recipe. Can be null.
-    @JsonKey(name: 'Subcategory')
-    required String? subcategory,
+    @JsonKey(name: 'Subcategory', defaultValue: '')
+    required String subcategory,
 
     /// The recipe's owner. Can be null.
     @JsonKey(name: 'Poster')

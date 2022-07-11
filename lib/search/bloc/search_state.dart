@@ -21,9 +21,7 @@ class SearchStateFailure extends SearchState{
 }
 
 class SearchStateSuccess extends SearchState{
-  const SearchStateSuccess({
-    this.recipes = const [],
-  });
+  const SearchStateSuccess(this.recipes);
 
   final List<Recipe> recipes;
 
