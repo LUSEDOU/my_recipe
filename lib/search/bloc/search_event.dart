@@ -13,9 +13,11 @@ class QueryChanged extends SearchEvent {
   List<Object> get props => [query];
 }
 
-class ListScroll extends SearchEvent {
-  const ListScroll();
+class PageChanged extends SearchEvent {
+  const PageChanged({required this.page});
+
+  final int page;
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [page];
 }

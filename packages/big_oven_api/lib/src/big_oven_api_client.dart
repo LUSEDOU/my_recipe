@@ -53,7 +53,11 @@ class BigOvenApiClient {
     );
 
     if (response.statusCode != 200) {
-      throw SearchResultError(message: response.data.toString());
+      throw SearchResultError(
+        message: response.data.toString(),
+        query: query,
+        page: page,
+      );
     }
 
     final results 

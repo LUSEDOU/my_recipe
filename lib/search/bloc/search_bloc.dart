@@ -14,8 +14,9 @@ EventTransformer<Event> debounce<Event>(Duration duration) {
 }
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  SearchBloc({required this.recipeRepository}) : super(SearchStateEmpty()) {
+  SearchBloc({required this.recipeRepository}) : super(const SearchState()) {
     on<QueryChanged>(_onQueryChanged, transformer: debounce(_duration));
+    on<PageChanged>(_onPageChanged);
   }
 
   final RecipeRepository recipeRepository;
@@ -26,17 +27,69 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   ) async {
     final query = event.query;
 
-    if (query.isEmpty) return emit(SearchStateEmpty());
+    if (query.isEmpty) return;
 
-    emit(SearchStateLoading());
+    emit(
+      state.copyWith(
+        status: SearchStatus.loading,
+        query: query,
+        page: 1,
+      ),
+    );
 
     try {
       final result = await recipeRepository.getRecipes(query, 1);
-      emit(SearchStateSuccess(result.recipes));
+      emit(
+        state.copyWith(
+          status: SearchStatus.success,
+          recipes: result.recipes,
+        ),
+      );
     } catch (error) {
-      emit( error is SearchResultError
-          ? SearchStateFailure(error.message)
-          : SearchStateFailure(error.toString()),
+      emit(
+        state.copyWith(
+          status: SearchStatus.failure,
+          message: error is SearchResultError
+              ? error.toString()
+              : 'Something wrong happened',
+        ),
+      );
+    }
+  }
+
+  Future<void> _onPageChanged(
+    PageChanged event,
+    Emitter<SearchState> emit,
+  ) async {
+    if (state.hasReachMax) return;
+
+    final page = event.page;
+    if (page == state.page || page == 1) return;
+
+    emit(
+      state.copyWith(
+        status: SearchStatus.loading,
+        page: page,
+      ),
+    );
+
+    try {
+      final result = await recipeRepository.getRecipes(state.query, page);
+      emit(result.recipes.isEmpty
+            ? state.copyWith(hasReachMax: true) 
+            : state.copyWith(
+                status: SearchStatus.success,
+                recipes: List.of(state.recipes)..addAll(result.recipes),
+              ),
+      );
+    } catch (error) {
+      emit(
+        state.copyWith(
+          status: SearchStatus.failure,
+          message: error is SearchResultError
+              ? error.toString()
+              : 'Something wrong happened',
+        ),
       );
     }
   }

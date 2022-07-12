@@ -1,30 +1,44 @@
 part of 'search_bloc.dart';
 
-abstract class SearchState extends Equatable {
-  const SearchState();
+enum SearchStatus {empty, loading, success, failure}
+
+class SearchState extends Equatable {
+  const SearchState({
+    this.status = SearchStatus.empty,
+    this.query = '',
+    this.page = 1,
+    this.recipes = const [],
+    this.message = '',
+    this.hasReachMax = false,
+  });
   
-  @override
-  List<Object> get props => [];
-}
-
-class SearchStateEmpty extends SearchState{}
-
-class SearchStateLoading extends SearchState{}
-
-class SearchStateFailure extends SearchState{
-  const SearchStateFailure(this.error);
-
-  final String error;
-  
-  @override
-  List<Object> get props => [error];
-}
-
-class SearchStateSuccess extends SearchState{
-  const SearchStateSuccess(this.recipes);
-
+  final SearchStatus status;
+  final String query;
+  final String message;
+  final int page;
+  final bool hasReachMax;
   final List<Recipe> recipes;
 
+  SearchState copyWith({
+    SearchStatus? status,
+    String? query,
+    String? message,
+    int? page,
+    bool? hasReachMax,
+    List<Recipe>? recipes,
+  }) {
+    return SearchState(
+      status: status ?? this.status,
+      query: query ?? this.query,
+      message: message ?? this.message,
+      page: page ?? this.page,
+      hasReachMax: hasReachMax ?? this.hasReachMax,
+      recipes: recipes ?? this.recipes,
+    );
+  }
+
+
   @override
-  List<Object> get props => [recipes];
+  List<Object> get props 
+    => [status, query, page, recipes, hasReachMax, message];
 }

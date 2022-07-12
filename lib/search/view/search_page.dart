@@ -1,3 +1,4 @@
+import 'package:big_oven_api/big_oven_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_recipes/l10n/l10n.dart';
@@ -73,8 +74,10 @@ class _SearchForm extends StatelessWidget {
         prefixIcon: const Icon(Icons.search_rounded),
         border: InputBorder.none,
         suffixIcon: IconButton(
-          onPressed: () => 
-              context.read<SearchBloc>().add(const QueryChanged(query: '')), 
+          onPressed: () {
+            _textController.clear();
+            context.read<SearchBloc>().add(const QueryChanged(query: ''));
+          },
           icon: const Icon(Icons.cancel_rounded),
         ),
       ),
@@ -89,33 +92,54 @@ class _SearchBody extends StatelessWidget {
 
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
-        if (state is SearchStateSuccess) {
-          return Expanded(child: _RecipeList());
+        final status = state.status;
+
+        if (status == SearchStatus.success) {
+          return Expanded(
+            child: _RecipeList(
+              recipes: state.recipes,
+            ),
+          );
+        }
+        
+        if (status == SearchStatus.loading) {
+          return const Center(child: CircularProgressIndicator());
         }
 
-        if (state is SearchStateLoading) {
-          return const CircularProgressIndicator();
-        }
-
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Icon(Icons.restaurant_rounded),
-            Text(
-              state is SearchStateEmpty
-                  ? l10n.recipeListInitial
-                  : l10n.recipeListNotFoundQuery(state.props),
-            )
-          ],
+        return Center(
+          child: Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Icon(Icons.restaurant_rounded),
+                Text(
+                  status == SearchStatus.empty
+                      ? l10n.recipeListInitial
+                      : l10n.recipeListNotFoundQuery(state.query),
+                )
+              ],
+            ),
+          ),
         );
       },
     );
   }
 }
 
+
 class _RecipeList extends StatelessWidget {
+  const _RecipeList({required this.recipes});
+
+  final List<Recipe> recipes;
+  
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return ListView.builder(
+      itemCount: context.read<SearchBloc>().state.page * 10,
+      itemBuilder: (context, int index) {
+        return Container();
+        // TODO(LUSEDOU): Do a itemBuilder 
+      },
+    );
   }
 }

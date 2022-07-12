@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_recipes/l10n/l10n.dart';
 
 class RecipeOverviewPage extends StatelessWidget {
-  const RecipeOverviewPage({Key? key}) : super(key: key);
+  const RecipeOverviewPage({super.key});
 
   @override
   Widget build(BuildContext context) {
