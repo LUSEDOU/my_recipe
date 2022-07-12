@@ -20,6 +20,7 @@ dependencies:
   intl: ^0.17.0
   local_storage:
     path: packages/local_storage
+  pull_to_refresh: ^2.0.0
   recipe_repository:
     path: packages/recipe_repository
   stream_transform: ^2.0.0

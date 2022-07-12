@@ -131,15 +131,52 @@ class _RecipeList extends StatelessWidget {
   const _RecipeList({required this.recipes});
 
   final List<Recipe> recipes;
-  
+
   @override
   Widget build(BuildContext context) {
+    final page = context.read<SearchBloc>().state.page;
+
     return ListView.builder(
-      itemCount: context.read<SearchBloc>().state.page * 10,
-      itemBuilder: (context, int index) {
-        return Container();
-        // TODO(LUSEDOU): Do a itemBuilder 
+      itemCount: context.read<SearchBloc>().state.hasReachMax
+          ? recipes.length
+          : recipes.length + 10,
+      itemBuilder: (BuildContext context, int index) {
+        return index >= recipes.length
+            ? _BottomLoader(page: page)
+            : _RecipeListTile(recipe: recipes[index]);
       },
     );
+  }
+}
+
+class _RecipeListTile extends StatelessWidget {
+  const _RecipeListTile({required this.recipe});
+
+  final Recipe recipe;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: const EdgeInsets.all(9),
+      leading: Image.network(recipe.thumbnail),
+      title: Text(recipe.title),
+      subtitle: recipe.subcategory.isNotEmpty
+          ? Text(recipe.subcategory)
+          : null,
+      onTap:() {}, 
+      //TODO(LUSEDOU): Create RecipeOverview route
+    );
+  }
+}
+
+class _BottomLoader extends StatelessWidget {
+  const _BottomLoader({required this.page});
+
+  final int page;
+
+  @override
+  Widget build(BuildContext context) {
+    context.read<SearchBloc>().add(PageChanged(page: page + 1));
+    return const CircularProgressIndicator();
   }
 }
