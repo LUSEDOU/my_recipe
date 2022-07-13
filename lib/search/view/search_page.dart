@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_recipes/l10n/l10n.dart';
 import 'package:my_recipes/search/search.dart';
+import 'package:my_recipes/utils/utils.dart';
 import 'package:recipe_repository/recipe_repository.dart';
 
 class SearchPage extends StatelessWidget {
@@ -106,19 +107,17 @@ class _SearchBody extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
 
-        return Center(
-          child: Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const Icon(Icons.restaurant_rounded),
-                Text(
-                  status == SearchStatus.empty
-                      ? l10n.recipeListInitial
-                      : l10n.recipeListNotFoundQuery(state.query),
-                )
-              ],
-            ),
+        return Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(Assets.logo),
+              Text(
+                status == SearchStatus.empty
+                    ? l10n.recipeListInitial
+                    : l10n.recipeListNotFoundQuery(state.query),
+              )
+            ],
           ),
         );
       },
