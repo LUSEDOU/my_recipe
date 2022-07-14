@@ -2,25 +2,11 @@
 // ignore_for_file: prefer_if_elements_to_conditionals_expressions
 
 import 'package:big_oven_api/big_oven_api.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_recipes/l10n/l10n.dart';
 import 'package:my_recipes/recipe_overview/recipe_overview.dart';
-
-const mockRecipe = Recipe(
-  id: 89987, 
-  title: 'Gelfite Fish 711', 
-  image: 'https://redirect.bigoven.com/pics/rs/256/gefilte-fish.jpg', 
-  thumbnail: 'https://redirect.bigoven.com/pics/rs/120/gefilte-fish.jpg', 
-  cuisine: 'American', 
-  category: 'Main Dish', 
-  subcategory: 'Fish and Shellfish',
-  user: User(
-    user: 'AllRecipesRecipes', 
-    thumbnail: 'https://bigoven-res.cloudinary.com/image/upload/t_recipe-48,d_avatar-default.png/avatar-default.png',
-  ),
-);
+import 'package:my_recipes/utils/mock_recipe.dart';
 
 class RecipeOverviewPage extends StatelessWidget {
   const RecipeOverviewPage({super.key});
@@ -41,7 +27,7 @@ class RecipeOverviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
         create: (context) => RecipeOverviewCubit(
-          recipe: mockRecipe,
+          recipe: Mocks.recipeNoSubCategoryNoUser,
         ),
         child: _RecipeOverviewView(),
       );
@@ -81,6 +67,7 @@ class _RecipeOverviewView extends StatelessWidget {
                 ),
                 child: Image.network(
                   recipe.image,
+                  fit: BoxFit.fitWidth,
                   // TODO(LUSEDOU): ASK: Image's border radius
                   // TODO(LUSEDOU): ASK: Zoom
                 ),
@@ -97,7 +84,10 @@ class _RecipeOverviewView extends StatelessWidget {
             Expanded(
               child: Container(
                 padding: EdgeInsets.all(size.width * 0.04),
-                color: theme.primaryColor,
+                decoration: BoxDecoration(
+                  color: theme.primaryColor,
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 child: Row(
                   children: <Widget>[
                     Column(

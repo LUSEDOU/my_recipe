@@ -47,7 +47,7 @@ ThemeData _buildMyRecipeTheme() {
       headline3: TextStyle(
         color: color.secondary.tone4,
         fontSize: textSize.headline3,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
       ),
       headline4: TextStyle(
         color: color.secondary.tone4,
