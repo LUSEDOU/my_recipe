@@ -4,12 +4,12 @@ class Scheme {
   const Scheme({
     required this.primary,
     required this.secondary,
-    this.thirty,
+    required this.tertiary,
   });
 
   final SchemeColor primary;
   final SchemeColor secondary;
-  final SchemeColor? thirty;
+  final SchemeColor tertiary;
 }
 
 class SchemeColor {

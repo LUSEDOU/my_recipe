@@ -14,6 +14,10 @@ class User {
     required this.thumbnail,
   });
 
+  /// Converts a [Map<String, dynamic>] into a [User] instance.
+  factory User.fromJson(Map<String, dynamic> json) 
+      => _$UserFromJson(json);
+
   /// The username of a recipe's owner
   @JsonKey(name: 'UserName')
   final String user;
@@ -21,10 +25,6 @@ class User {
   /// The profile image's url of a recipe's owner
   @JsonKey(name: 'ImageURL48')
   final String thumbnail;
-
-  /// Converts a [Map<String, dynamic>] into a [User] instance.
-  factory User.fromJson(Map<String, dynamic> json) 
-      => _$UserFromJson(json);
 
   /// A empty user.
   static const empty = User(user: '', thumbnail: '');

@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_recipes/l10n/l10n.dart';
 import 'package:my_recipes/recipe_overview/recipe_overview.dart';
-import 'package:my_recipes/search/search.dart';
 import 'package:my_recipes/utils/theme.dart';
 import 'package:recipe_repository/recipe_repository.dart';
 
@@ -22,12 +21,12 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
       value: recipeRepository,
-      child: MaterialApp(
+      child: MaterialApp(        
         debugShowCheckedModeBanner: false,
-        theme: theme,
+        theme: kMyRecipeTheme,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        home: const SearchPage(),
+        home: const RecipeOverviewPage(),
       ),
     );
   }

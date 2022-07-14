@@ -21,3 +21,10 @@ class PageChanged extends SearchEvent {
   @override
   List<Object> get props => [page];
 }
+
+class Refresh extends SearchEvent {
+  const Refresh();
+
+  @override
+  List<Object> get props => [];
+}

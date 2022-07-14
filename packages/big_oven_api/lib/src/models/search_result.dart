@@ -11,7 +11,7 @@ class SearchResult {
   });
 
   ///
-  static SearchResult fromJson(Map<String, dynamic> json) {
+  factory SearchResult.fromJson(Map<String, dynamic> json) {
     final recipes = (json['Results'] as List<dynamic>)
         .map((dynamic recipe) {
             log(recipe.toString());
@@ -42,7 +42,7 @@ class SearchResultError implements Exception{
   });
 
   ///
-  static SearchResultError fromJson(dynamic json) {
+  factory SearchResultError.fromJson(Map<String, dynamic> json) {
     return SearchResultError(
       message: json['message'] as String,
       query: json['query'] as String,

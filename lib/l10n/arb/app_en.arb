@@ -24,5 +24,25 @@
                 "description": "The query of the search"
             }
         }
+    },
+    "recipeOverviewParameterNull": "No available",
+    "@recipeOverviewParameterNull": {
+        "description": "Text shown when a parameter of recipe is null"
+    },
+    "recipeOverviewID": "ID",
+    "@recipeOverviewID": {
+        "description": "Text shown for the table ID's label"
+    },
+    "recipeOverviewCuisine": "Cuisine",
+    "@recipeOverviewCuisine": {
+        "description": "Text shown for the table Cuisine's label"
+    },
+    "recipeOverviewCategory": "Category",
+    "@recipeOverviewCategory": {
+        "description": "Text shown for the table Category's label"
+    },
+    "recipeOverviewPoster": "Post by",
+    "@recipeOverviewPoster": {
+        "description": "Text shown for the table Poster's label"
     }
 }

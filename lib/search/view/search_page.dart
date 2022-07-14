@@ -2,6 +2,7 @@ import 'package:big_oven_api/big_oven_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_recipes/l10n/l10n.dart';
+import 'package:my_recipes/recipe_overview/view/recipe_overview_page.dart';
 import 'package:my_recipes/search/search.dart';
 import 'package:my_recipes/utils/utils.dart';
 import 'package:recipe_repository/recipe_repository.dart';
@@ -30,7 +31,7 @@ class _SearchView extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+          padding: EdgeInsets.all(size.width * 0.05),
           child: Column(
             children: <Widget>[
               SizedBox(height: size.height * 0.03),
@@ -38,7 +39,7 @@ class _SearchView extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   l10n.recipeSearcherTitle,
-                  style: textTheme.headlineMedium,
+                  style: textTheme.headline1,
                 ),
               ),
               SizedBox(height: size.height * 0.01,),
@@ -77,7 +78,7 @@ class _SearchForm extends StatelessWidget {
         suffixIcon: IconButton(
           onPressed: () {
             _textController.clear();
-            context.read<SearchBloc>().add(const QueryChanged(query: ''));
+            context.read<SearchBloc>().add(const Refresh());
           },
           icon: const Icon(Icons.cancel_rounded),
         ),
@@ -90,6 +91,9 @@ class _SearchBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    final size = MediaQuery.of(context).size;
 
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
@@ -104,7 +108,11 @@ class _SearchBody extends StatelessWidget {
         }
         
         if (status == SearchStatus.loading) {
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+            child: CircularProgressIndicator(
+              color: theme.shadowColor,
+            ),
+          );
         }
 
         return Expanded(
@@ -112,10 +120,12 @@ class _SearchBody extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Image.asset(Assets.logo),
+              SizedBox(height: size.width * 0.06),
               Text(
                 status == SearchStatus.empty
                     ? l10n.recipeListInitial
                     : l10n.recipeListNotFoundQuery(state.query),
+                style: textTheme.headline2,
               )
             ],
           ),
@@ -162,8 +172,11 @@ class _RecipeListTile extends StatelessWidget {
       subtitle: recipe.subcategory.isNotEmpty
           ? Text(recipe.subcategory)
           : null,
-      onTap:() {}, 
-      //TODO(LUSEDOU): Create RecipeOverview route
+      onTap:() {
+        Navigator.of(context).push(
+          RecipeOverviewPage.route(recipe: recipe),
+        );
+      },
     );
   }
 }

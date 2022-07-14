@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 class BigOvenApiClientHTTP {
   /// {@macro big_oven_api_client}
   BigOvenApiClientHTTP({http.Client? httpClient, 
-      this.apiKey = 'glFUKikehWjLW900etpS564VgIzOWSW5'})
+      this.apiKey = '?',})
       : _httpClient = httpClient ?? http.Client();
 
   final http.Client _httpClient;

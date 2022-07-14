@@ -17,6 +17,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   SearchBloc({required this.recipeRepository}) : super(const SearchState()) {
     on<QueryChanged>(_onQueryChanged, transformer: debounce(_duration));
     on<PageChanged>(_onPageChanged);
+    on<Refresh>(_onRefresh);
   }
 
   final RecipeRepository recipeRepository;
@@ -93,4 +94,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       );
     }
   }
+
+  void _onRefresh (
+    Refresh event,
+    Emitter<SearchState> emit,
+  ) {
+    emit(const SearchState());
+  } 
 }

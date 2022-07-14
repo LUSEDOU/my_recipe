@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
-class _Size {
-  const _Size({required this.size});
+class Sizes {
+  const Sizes({required this.size});
 
   final Size size;
 
@@ -17,6 +17,7 @@ class TextSize {
     required this.headline1,
     this.headline2,
     this.headline3,
+    this.headline4,
     required this.title1,
     this.title2,
     this.title3,
@@ -31,6 +32,7 @@ class TextSize {
   final double headline1;
   final double? headline2;
   final double? headline3;
+  final double? headline4;
   
   final double title1;
   final double? title2;
