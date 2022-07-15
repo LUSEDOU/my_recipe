@@ -4,6 +4,7 @@ const mock = MockRecipe();
 
 class Mocks {
   static const recipe = MockRecipe();
+  static const list = MockRecipeList();
 
   static final recipeFull =  recipe.mockRecipe;
   static final recipeNoUser = mock.copyWith(user: User.empty).mockRecipe;
@@ -43,12 +44,10 @@ class Mocks {
     user: User.empty,
   ).mockRecipe;
 
+  static final listFull4 = list.create(
+    type2: mock.copyWith(cuisine: ''),
+  );
 } 
-
-const mockUser = User(
-    user: 'AllRecipesRecipes', 
-    thumbnail: 'https://bigoven-res.cloudinary.com/image/upload/t_recipe-48,d_avatar-default.png/avatar-default.png',
-);
 
 class MockRecipe {
   const MockRecipe({
@@ -113,5 +112,32 @@ class MockRecipe {
       userName: userName ?? this.userName ,
       userThumbnail: userThumbnail ?? this.userThumbnail ,
     );
+  }
+}
+
+class MockRecipeList {
+  const MockRecipeList({
+    this.recipes = const [],
+  });
+
+  final List<Recipe> recipes;
+
+  MockRecipeList create({
+    MockRecipe type1 = const MockRecipe(),
+    MockRecipe type2 = const MockRecipe(),
+  }) {
+    final list = <Recipe> [
+      type1.mockRecipe,
+      type2.mockRecipe,
+      type1.mockRecipe,
+      type2.mockRecipe,
+      type1.mockRecipe,
+      type2.mockRecipe,
+      type1.mockRecipe,
+      type2.mockRecipe,
+      type1.mockRecipe,
+      type2.mockRecipe,
+    ];
+    return MockRecipeList(recipes: list);
   }
 }

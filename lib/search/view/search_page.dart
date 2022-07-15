@@ -13,8 +13,8 @@ class SearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) 
-          => SearchBloc(recipeRepository: context.read<RecipeRepository>()),
+      create: (context) =>
+          SearchBloc(recipeRepository: context.read<RecipeRepository>()),
       child: _SearchView(),
     );
   }
@@ -42,15 +42,19 @@ class _SearchView extends StatelessWidget {
                   style: textTheme.headline1,
                 ),
               ),
-              SizedBox(height: size.height * 0.01,),
+              SizedBox(
+                height: size.height * 0.01,
+              ),
               Text(
                 l10n.recipeSearcherSubtitle,
                 style: textTheme.subtitle1,
               ),
               SizedBox(height: size.height * 0.02),
               _SearchForm(),
-              const SizedBox(height: 10),
-              _SearchBody(),
+              SizedBox(height: size.height * 0.04),
+              Expanded(
+                child: _SearchBody(),
+              ),
             ],
           ),
         ),
@@ -63,24 +67,33 @@ class _SearchForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final theme = Theme.of(context);
     final _textController = TextEditingController();
 
     return TextField(
       controller: _textController,
-      onChanged: (text) => 
-        context.read<SearchBloc>().add(QueryChanged(query: text)),
+      onChanged: (text) =>
+          context.read<SearchBloc>().add(QueryChanged(query: text)),
       autocorrect: false,
+      textAlignVertical: TextAlignVertical.center,
+      cursorColor: theme.colorScheme.secondary,
       decoration: InputDecoration(
-        filled: true,
         hintText: l10n.recipeSearcherTextLabel,
         prefixIcon: const Icon(Icons.search_rounded),
-        border: InputBorder.none,
-        suffixIcon: IconButton(
-          onPressed: () {
-            _textController.clear();
-            context.read<SearchBloc>().add(const Refresh());
+        suffixIcon: BlocBuilder<SearchBloc, SearchState>(
+          builder: (context, state) {
+            if (state.status == SearchStatus.empty) {
+              return const SizedBox();
+            }
+
+            return IconButton(
+              onPressed: () {
+                _textController.clear();
+                context.read<SearchBloc>().add(const Refresh());
+              },
+              icon: const Icon(Icons.cancel_rounded),
+            );
           },
-          icon: const Icon(Icons.cancel_rounded),
         ),
       ),
     );
@@ -100,13 +113,11 @@ class _SearchBody extends StatelessWidget {
         final status = state.status;
 
         if (status == SearchStatus.success) {
-          return Expanded(
-            child: _RecipeList(
-              recipes: state.recipes,
-            ),
+          return _RecipeList(
+            recipes: state.recipes,
           );
         }
-        
+
         if (status == SearchStatus.loading) {
           return Center(
             child: CircularProgressIndicator(
@@ -115,26 +126,23 @@ class _SearchBody extends StatelessWidget {
           );
         }
 
-        return Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image.asset(Assets.logo),
-              SizedBox(height: size.width * 0.06),
-              Text(
-                status == SearchStatus.empty
-                    ? l10n.recipeListInitial
-                    : l10n.recipeListNotFoundQuery(state.query),
-                style: textTheme.headline2,
-              )
-            ],
-          ),
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image.asset(Assets.logo),
+            SizedBox(height: size.width * 0.06),
+            Text(
+              status == SearchStatus.empty
+                  ? l10n.recipeListInitial
+                  : l10n.recipeListNotFoundQuery(state.query),
+              style: textTheme.headline2,
+            )
+          ],
         );
       },
     );
   }
 }
-
 
 class _RecipeList extends StatelessWidget {
   const _RecipeList({required this.recipes});
@@ -148,7 +156,7 @@ class _RecipeList extends StatelessWidget {
     return ListView.builder(
       itemCount: context.read<SearchBloc>().state.hasReachMax
           ? recipes.length
-          : recipes.length + 10,
+          : recipes.length + 1,
       itemBuilder: (BuildContext context, int index) {
         return index >= recipes.length
             ? _BottomLoader(page: page)
@@ -160,23 +168,45 @@ class _RecipeList extends StatelessWidget {
 
 class _RecipeListTile extends StatelessWidget {
   const _RecipeListTile({required this.recipe});
-
   final Recipe recipe;
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: const EdgeInsets.all(9),
-      leading: Image.network(recipe.thumbnail),
-      title: Text(recipe.title),
-      subtitle: recipe.subcategory.isNotEmpty
-          ? Text(recipe.subcategory)
-          : null,
-      onTap:() {
-        Navigator.of(context).push(
-          RecipeOverviewPage.route(recipe: recipe),
-        );
-      },
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    final size = MediaQuery.of(context).size;
+
+    return Padding(
+      padding: EdgeInsets.only(bottom: size.height * 0.02),
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: size.width * 0.02),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: ListTile(
+          leading: DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Image.network(recipe.thumbnail),
+          ),
+          title: Text(
+            recipe.title,
+            style: textTheme.headline5,
+          ),
+          subtitle: Text(
+            recipe.cuisine.isNotEmpty 
+                ? recipe.cuisine
+                : '',
+            style: textTheme.bodyText2,
+          ),
+          onTap: () {
+            Navigator.of(context).push(
+              RecipeOverviewPage.route(recipe: recipe),
+            );
+          },
+        ),
+      ),
     );
   }
 }

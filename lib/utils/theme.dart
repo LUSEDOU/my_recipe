@@ -27,7 +27,11 @@ ThemeData _buildMyRecipeTheme() {
       color: color.secondary.tone4,
     ),
     inputDecorationTheme: base.inputDecorationTheme.copyWith(
+      // TODO(LUSEDOU): Ask: Line of textField
+      filled: true,
+      contentPadding: const EdgeInsets.all(15),
       iconColor: color.secondary.tone4,
+      border: InputBorder.none,
       hintStyle: TextStyle(
         fontSize: textSize.subtitle1,
       ),
@@ -54,6 +58,11 @@ ThemeData _buildMyRecipeTheme() {
         fontSize: textSize.headline4,
         fontWeight: FontWeight.w600,
       ),
+      headline5: TextStyle(
+        color: color.secondary.tone4,
+        fontSize: textSize.title1,
+        fontWeight: FontWeight.w500,
+      ),
       subtitle1: TextStyle(
         color: color.primary.tone5,
         fontWeight: FontWeight.w400,  
@@ -69,7 +78,8 @@ ThemeData _buildMyRecipeTheme() {
       ),
       bodyText2: TextStyle(
         color: color.secondary.tone4,
-        fontSize: textSize.body1,
+        fontSize: textSize.body2,
+        fontWeight: FontWeight.w300,
       ),
     ),
   );
@@ -104,9 +114,10 @@ Scheme get color
       headline2: 20,
       headline3: 30,
       headline4: 18,
-      title1: 15, 
+      title1: 17, 
       subtitle1: 15, 
       subtitle2: 18,
       subtitle3: 10,
       body1: 17,
+      body2: 15,
     );
