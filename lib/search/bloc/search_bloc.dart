@@ -51,7 +51,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         state.copyWith(
           status: SearchStatus.failure,
           message: error is SearchResultError
-              ? error.toString()
+              ? error.message
               : 'Something wrong happened',
         ),
       );

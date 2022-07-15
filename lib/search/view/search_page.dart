@@ -1,10 +1,7 @@
-import 'package:big_oven_api/big_oven_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_recipes/l10n/l10n.dart';
-import 'package:my_recipes/recipe_overview/view/recipe_overview_page.dart';
 import 'package:my_recipes/search/search.dart';
-import 'package:my_recipes/utils/utils.dart';
 import 'package:recipe_repository/recipe_repository.dart';
 
 class SearchPage extends StatelessWidget {
@@ -50,175 +47,15 @@ class _SearchView extends StatelessWidget {
                 style: textTheme.subtitle1,
               ),
               SizedBox(height: size.height * 0.02),
-              _SearchForm(),
+              const SearchForm(),
               SizedBox(height: size.height * 0.04),
-              Expanded(
-                child: _SearchBody(),
+              const Expanded(
+                child: SearchBody(),
               ),
             ],
           ),
         ),
       ),
     );
-  }
-}
-
-class _SearchForm extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final theme = Theme.of(context);
-    final _textController = TextEditingController();
-
-    return TextField(
-      controller: _textController,
-      onChanged: (text) =>
-          context.read<SearchBloc>().add(QueryChanged(query: text)),
-      autocorrect: false,
-      textAlignVertical: TextAlignVertical.center,
-      cursorColor: theme.colorScheme.secondary,
-      decoration: InputDecoration(
-        hintText: l10n.recipeSearcherTextLabel,
-        prefixIcon: const Icon(Icons.search_rounded),
-        suffixIcon: BlocBuilder<SearchBloc, SearchState>(
-          builder: (context, state) {
-            if (state.status == SearchStatus.empty) {
-              return const SizedBox();
-            }
-
-            return IconButton(
-              onPressed: () {
-                _textController.clear();
-                context.read<SearchBloc>().add(const Refresh());
-              },
-              icon: const Icon(Icons.cancel_rounded),
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class _SearchBody extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-    final size = MediaQuery.of(context).size;
-
-    return BlocBuilder<SearchBloc, SearchState>(
-      builder: (context, state) {
-        final status = state.status;
-
-        if (status == SearchStatus.success) {
-          return _RecipeList(
-            recipes: state.recipes,
-          );
-        }
-
-        if (status == SearchStatus.loading) {
-          return Center(
-            child: CircularProgressIndicator(
-              color: theme.shadowColor,
-            ),
-          );
-        }
-
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image.asset(Assets.logo),
-            SizedBox(height: size.width * 0.06),
-            Text(
-              status == SearchStatus.empty
-                  ? l10n.recipeListInitial
-                  : l10n.recipeListNotFoundQuery(state.query),
-              style: textTheme.headline2,
-            )
-          ],
-        );
-      },
-    );
-  }
-}
-
-class _RecipeList extends StatelessWidget {
-  const _RecipeList({required this.recipes});
-
-  final List<Recipe> recipes;
-
-  @override
-  Widget build(BuildContext context) {
-    final page = context.read<SearchBloc>().state.page;
-
-    return ListView.builder(
-      itemCount: context.read<SearchBloc>().state.hasReachMax
-          ? recipes.length
-          : recipes.length + 1,
-      itemBuilder: (BuildContext context, int index) {
-        return index >= recipes.length
-            ? _BottomLoader(page: page)
-            : _RecipeListTile(recipe: recipes[index]);
-      },
-    );
-  }
-}
-
-class _RecipeListTile extends StatelessWidget {
-  const _RecipeListTile({required this.recipe});
-  final Recipe recipe;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-    final size = MediaQuery.of(context).size;
-
-    return Padding(
-      padding: EdgeInsets.only(bottom: size.height * 0.02),
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: size.width * 0.02),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: ListTile(
-          leading: DecoratedBox(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Image.network(recipe.thumbnail),
-          ),
-          title: Text(
-            recipe.title,
-            style: textTheme.headline5,
-          ),
-          subtitle: Text(
-            recipe.cuisine.isNotEmpty 
-                ? recipe.cuisine
-                : '',
-            style: textTheme.bodyText2,
-          ),
-          onTap: () {
-            Navigator.of(context).push(
-              RecipeOverviewPage.route(recipe: recipe),
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class _BottomLoader extends StatelessWidget {
-  const _BottomLoader({required this.page});
-
-  final int page;
-
-  @override
-  Widget build(BuildContext context) {
-    context.read<SearchBloc>().add(PageChanged(page: page + 1));
-    return const CircularProgressIndicator();
   }
 }

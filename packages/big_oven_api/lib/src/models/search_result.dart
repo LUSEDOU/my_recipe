@@ -1,61 +1,26 @@
-import 'dart:developer';
-
 import 'package:big_oven_api/big_oven_api.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-///
-class SearchResult {
-  ///
-  const SearchResult({
-    required this.recipes, 
-    required this.recipesCount,
-  });
+part 'search_result.freezed.dart';
+part 'search_result.g.dart';
 
-  ///
-  factory SearchResult.fromJson(Map<String, dynamic> json) {
-    final recipes = (json['Results'] as List<dynamic>)
-        .map((dynamic recipe) {
-            log(recipe.toString());
-            return Recipe.fromJson(recipe as Map<String, dynamic>);
-            },)
-        .toList();
-    log(recipes.length.toString());
-    return SearchResult(
-      recipes: recipes,
-      recipesCount: json['ResultCount'] as int,
-    );
-  }
+@freezed
+/// {@template search_result}
+/// A model of a Search Result
+/// {@endtemplate}
+class SearchResult with _$SearchResult{
+  /// {@macro search_result}
+  const factory SearchResult({
+    @JsonKey(name: 'Results')
+    /// The recipes of the result
+    required List<Recipe> recipes,
 
-  ///
-  final List<Recipe> recipes;
-  
-  ///
-  final int recipesCount;
-}
+    @JsonKey(name: 'ResultsCount')
+    /// The recipes' count
+    required int recipesCount,
+  }) = _SearchResult;
 
-///
-class SearchResultError implements Exception{
-  ///
-  const SearchResultError({
-    required this.message, 
-    required this.query,
-    required this.page,
-  });
-
-  ///
-  factory SearchResultError.fromJson(Map<String, dynamic> json) {
-    return SearchResultError(
-      message: json['message'] as String,
-      query: json['query'] as String,
-      page: json['page'] as int,
-    );
-  }
-
-  ///
-  final String message;
-
-  ///
-  final String query;
-
-  /// 
-  final int page;
+  /// Converts a [Map<String, dynamic>] into a [SearchResult] instance.
+  factory SearchResult.fromJson(Map<String, dynamic> json) 
+      => _$SearchResultFromJson(json);
 }

@@ -18,9 +18,9 @@ class Recipe {
     required this.title,
     required this.image,
     required this.thumbnail,
-    required this.cuisine,
-    required this.category,
-    required this.subcategory,
+    this.cuisine = '',
+    this.category = '',
+    this.subcategory = '',
     this.user = User.empty,
   });
 
@@ -45,15 +45,15 @@ class Recipe {
   final String thumbnail;
 
   /// The cuisine of the recipe. Can be null.
-  @JsonKey(name: 'Cuisine', defaultValue: '')
+  @JsonKey(name: 'Cuisine')
   final String cuisine;
 
   /// The category of the recipe. Can be null.
-  @JsonKey(name: 'Category', defaultValue: '')
+  @JsonKey(name: 'Category')
   final String category;
 
   /// The subcategory of the recipe. Can be null.
-  @JsonKey(name: 'Subcategory', defaultValue: '')
+  @JsonKey(name: 'Subcategory')
   final String subcategory;
 
   /// The recipe's owner. Can be null.

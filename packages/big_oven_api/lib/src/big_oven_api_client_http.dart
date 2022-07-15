@@ -24,7 +24,7 @@ class BigOvenApiClientHTTP {
   static const _headers = {'Content-Type': 'application/json'};
 
   
-  /// Finds a [Recipe] `/recipes?query=(query)&page=(page)&rpp=(rpp)&api_key=(apiKey)`.
+  /// Finds a [Recipe] `/recipes?title_kw=(query)&pg=(page)&rpp=(rpp)&api_key=(apiKey)`.
   Future<SearchResult> search({
     required String query,
     int page = 1,
@@ -46,7 +46,7 @@ class BigOvenApiClientHTTP {
 
     if (response.statusCode != 200) {
       log('response not 200');
-      throw SearchResultError.fromJson(results);
+      throw SearchResultError(page: page, query: query, message: response.body);
     }
     return SearchResult.fromJson(results);
   }

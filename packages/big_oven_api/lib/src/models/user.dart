@@ -23,7 +23,7 @@ class User {
   final String user;
 
   /// The profile image's url of a recipe's owner
-  @JsonKey(name: 'ImageURL48')
+  @JsonKey(name: 'ImageUrl48')
   final String thumbnail;
 
   /// A empty user.

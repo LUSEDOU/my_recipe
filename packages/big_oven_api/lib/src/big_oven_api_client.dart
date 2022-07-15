@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:big_oven_api/big_oven_api.dart';
 import 'package:dio/dio.dart';
@@ -18,30 +19,36 @@ class BigOvenApiClient {
   /// The API_key
   final String apiKey;
 
-  static const _baseURL = 'api.bigoven.com';
+  static const _baseURL = 'https://api.bigoven.com';
   static const _recipeEndPoint = '/recipes';
   static const _headers = {'Content-Type': 'application/json'};
 
-  /// Finds a [SearchResult] `/recipes?query=(query)&page=(page)&rpp=(rpp)&api_key=(apiKey)`.
+  /// Finds a [SearchResult] `/recipes?title_kw=(query)&pg=(page)&rpp=(rpp)&api_key=(apiKey)`.
   Future<SearchResult> search({
     required String query,
     int page = 1,
+    int rpp = 1,
   }) async {
-    final queryParameters = <String, dynamic>{
-      'title_kw': query, 'pg': '$page', 'rpp': '10', 'api_key': apiKey
+    final queryParameters = <String, String>{
+      'title_kw': query, 'pg': '$page', 'rpp': '$rpp', 'api_key': apiKey
     };
-
+    
     final response = await _dio.get<String>(
       _recipeEndPoint,
       queryParameters: queryParameters,
       options: Options(headers: _headers),
     );
-
+    log('Results gotten');
     final results 
       = json.decode(response.data.toString()) as Map<String, dynamic>;
-
+    log('Decode gotten');
     if (response.statusCode != 200) {
-      throw SearchResultError.fromJson(results);
+      log('200 error');
+      throw SearchResultError(
+        page: page, 
+        query: query, 
+        message: response.statusMessage.toString(),
+      );
     }
     return SearchResult.fromJson(results);
   }
