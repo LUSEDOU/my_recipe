@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:big_oven_api/big_oven_api.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -17,7 +15,7 @@ class SearchResult with _$SearchResult{
     /// The recipes of the result
     required List<Recipe> recipes,
 
-    @JsonKey(name: 'ResultsCount')
+    @JsonKey(name: 'ResultCount')
     /// The recipes' count
     required int recipesCount,
   }) = _SearchResult;

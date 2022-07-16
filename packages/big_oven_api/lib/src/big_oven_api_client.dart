@@ -52,6 +52,7 @@ class BigOvenApiClient {
     }
 
     final a = SearchResult.fromJson(results);
+    log('AAAAAAAAAAAAAAAAAAAAAA');
     return a;
   }
 }
