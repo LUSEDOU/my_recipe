@@ -1,43 +1,45 @@
 import 'package:big_oven_api/big_oven_api.dart';
 
-const mock = MockRecipe();
+final mock = Mocks();
+
 
 class Mocks {
   static const recipe = MockRecipe();
   static const list = MockRecipeList();
 
   static final recipeFull =  recipe.mockRecipe;
-  static final recipeNoUser = mock.copyWith(user: User.empty).mockRecipe;
-  static final recipeNoCuisine = mock.copyWith(cuisine: '').mockRecipe;
-  static final recipeNoCuisineNoUser = mock.copyWith(
+  static final recipeNoUser = recipe.copyWith(user: User.empty).mockRecipe;
+  static final recipeNoCuisine = recipe.copyWith(cuisine: '').mockRecipe;
+  static final recipeNoCuisineNoUser = recipe.copyWith(
     user: User.empty, 
     cuisine: '',
   ).mockRecipe;
-  static final recipeNoCategory = mock.copyWith(category: '').mockRecipe;
-  static final recipeNoCategoryNoUser = mock.copyWith(
+  static final recipeNoCategory = recipe.copyWith(category: '').mockRecipe;
+  static final recipeNoCategoryNoUser = recipe.copyWith(
     category: '',
     user: User.empty,
   ).mockRecipe;
-  static final recipeNoSubCategory = mock.copyWith(subCategory: '').mockRecipe;
-  static final recipeNoSubCategoryNoUser = mock.copyWith(
+  static final recipeNoSubCategory 
+      = recipe.copyWith(subCategory: '').mockRecipe;
+  static final recipeNoSubCategoryNoUser = recipe.copyWith(
     subCategory: '',
     user: User.empty,
   ).mockRecipe;
-  static final recipeNoSubNoCategory = mock.copyWith(
+  static final recipeNoSubNoCategory = recipe.copyWith(
     subCategory: '',
     category: '',
   ).mockRecipe;
-  static final recipeNoSubNoCategoryNoUser = mock.copyWith(
+  static final recipeNoSubNoCategoryNoUser = recipe.copyWith(
     subCategory: '',
     category: '',
     user: User.empty,
   ).mockRecipe;
-  static final recipeNoSubNoCategoryNoCuisine = mock.copyWith(
+  static final recipeNoSubNoCategoryNoCuisine = recipe.copyWith(
     subCategory: '',
     category: '',
     cuisine: '',
   ).mockRecipe;
-  static final recipeIncomplete = mock.copyWith(
+  static final recipeIncomplete = recipe.copyWith(
     subCategory: '',
     category: '',
     cuisine: '',
@@ -45,9 +47,19 @@ class Mocks {
   ).mockRecipe;
 
   static final listFull4 = list.create(
-    type2: mock.copyWith(cuisine: ''),
+      type2: recipe.copyWith(cuisine: ''),
+      type3: recipe.copyWith(
+        subCategory: '',
+        category: '',
+        cuisine: '',
+        user: User.empty,
+      ),
+      type4: recipe.copyWith(
+        user: User.empty,
+      ),
   );
 } 
+
 
 class MockRecipe {
   const MockRecipe({
@@ -125,18 +137,21 @@ class MockRecipeList {
   MockRecipeList create({
     MockRecipe type1 = const MockRecipe(),
     MockRecipe type2 = const MockRecipe(),
+    MockRecipe type3 = const MockRecipe(),
+    MockRecipe type4 = const MockRecipe(),
+    MockRecipe type5 = const MockRecipe(),
   }) {
     final list = <Recipe> [
       type1.mockRecipe,
       type2.mockRecipe,
+      type3.mockRecipe,
+      type4.mockRecipe,
+      type5.mockRecipe,
       type1.mockRecipe,
       type2.mockRecipe,
-      type1.mockRecipe,
-      type2.mockRecipe,
-      type1.mockRecipe,
-      type2.mockRecipe,
-      type1.mockRecipe,
-      type2.mockRecipe,
+      type3.mockRecipe,
+      type4.mockRecipe,
+      type5.mockRecipe,
     ];
     return MockRecipeList(recipes: list);
   }

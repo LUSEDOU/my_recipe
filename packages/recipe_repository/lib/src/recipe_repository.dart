@@ -30,8 +30,12 @@ class RecipeRepository {
 
     try {
       final result = await _bigOvenApiClient.search(query: query, page: pages);
+      log(result.recipes.toString());
       final cachedResult = result.toJson();
+      log('Cached gotcha');
+
       await _localStorage.write('$query$pages', cachedResult);
+      log('Write gotcha');
 
       return result; 
     } catch (e) {

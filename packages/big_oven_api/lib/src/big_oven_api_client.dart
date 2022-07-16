@@ -50,6 +50,8 @@ class BigOvenApiClient {
         message: response.statusMessage.toString(),
       );
     }
-    return SearchResult.fromJson(results);
+
+    final a = SearchResult.fromJson(results);
+    return a;
   }
 }
