@@ -1,9 +1,10 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:recipes_api/recipes_api.dart';
 
 /// {@template local_storage}
 /// A local storage implemented with Hive package
 /// {@endtemplate}
-class LocalStorage {
+class LocalStorage implements LocalStorageRecipesApi{
   /// The storage
   late Box<dynamic> hiveBox;
 
@@ -13,31 +14,39 @@ class LocalStorage {
   }
 
   /// Initialize the storage
+  @override
   Future<void> init() async {
     await Hive.initFlutter();
     await openBox();
   }
 
   /// Remove the [key] from the storage
+  @override
   Future<void> remove(String key) async 
       => hiveBox.delete(key);
 
   /// Get the associated value from the storage
+  @override
   dynamic get(String key) => hiveBox.get(key);
 
   /// Returns all values in the storage
+  @override
   dynamic getAll() => hiveBox.values.toList();
 
   /// If the storage contains the value
+  @override
   bool has(String key) => hiveBox.containsKey(key);
 
   /// Write the key/value in the storage
-  Future<void> write(String? key, dynamic data) 
+  @override
+  Future<void> write(String key, dynamic data) 
       => hiveBox.put(key, data);
 
   /// Delete all the data in the storage
+  @override
   Future<void> clear() => hiveBox.clear();
 
   /// Close the storage
+  @override
   Future<void> close() => hiveBox.close();
 }

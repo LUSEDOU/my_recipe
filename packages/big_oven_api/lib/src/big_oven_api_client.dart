@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:big_oven_api/big_oven_api.dart';
 import 'package:dio/dio.dart';
+import 'package:recipes_api/recipes_api.dart';
 
 /// {@template big_oven_api_client}
 /// Dart API client which wraps the [BigOven Api](https://api2.bigoven.com/)
@@ -54,5 +55,37 @@ class BigOvenApiClient {
     final a = SearchResult.fromJson(results);
     log('AAAAAAAAAAAAAAAAAAAAAA');
     return a;
+  }
+
+  /// A get
+  Future<APIResponse<dynamic>> get(
+    String endPoint, {
+    Map<String, dynamic>? queryParameters,
+  }) async {
+
+    try {
+      final response = await _dio.get<String>(
+        endPoint,
+        queryParameters: queryParameters,
+      );
+
+      if (response.statusCode != 200) {
+        throw APIException(
+          title: 'BigOvenApiException',
+          message: response.statusMessage 
+              ?? 'An unknown exception ocurred',
+        );
+      }
+
+      return APIResponse(
+        data: response,
+      );
+
+    } catch (e) {
+      throw APIException(
+        title: 'HttpException',
+        message: e.toString(),
+      );
+    }
   }
 }
