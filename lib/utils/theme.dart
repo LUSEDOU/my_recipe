@@ -27,7 +27,6 @@ ThemeData _buildMyRecipeTheme() {
       color: color.secondary.tone4,
     ),
     inputDecorationTheme: base.inputDecorationTheme.copyWith(
-      // TODO(LUSEDOU): Ask: Line of textField
       filled: true,
       contentPadding: const EdgeInsets.all(15),
       iconColor: color.secondary.tone4,

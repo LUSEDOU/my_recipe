@@ -20,11 +20,9 @@ class HttpRecipesRepository implements RecipeRepository{
   }) : _httpRecipesApi = httpRecipesApi ?? BigOvenApiClient(),
        _localStorageRecipesApi = localStorageRecipesApi ?? LocalStorage();
   
-  @override
   /// The http Api for the repository
   final BigOvenApiClient _httpRecipesApi;
-  
-  @override
+
   /// The cache or local storage for the repository
   final LocalStorage _localStorageRecipesApi;
 
@@ -44,10 +42,10 @@ class HttpRecipesRepository implements RecipeRepository{
       'title_kw': query,
       'pg': pages,
       'rpp': 10,
-      'apiKey': apiKey,
+      'api_key': apiKey,
     };
 
-    final cachedResponseData = getFromCache(
+    final cachedResponseData = await getFromCache(
       endPoint,
       queryParameters: queryParameters,
     );

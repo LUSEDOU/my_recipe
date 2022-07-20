@@ -26,24 +26,30 @@ class SearchBody extends StatelessWidget {
 
         if (status == SearchStatus.loading) {
           return Center(
-            child: CircularProgressIndicator(
-              color: theme.shadowColor,
+            child: SingleChildScrollView(
+              child: CircularProgressIndicator(
+                color: theme.shadowColor,
+              ),
             ),
           );
         }
 
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image.asset(Assets.logo),
-            SizedBox(height: size.width * 0.06),
-            Text(
-              status == SearchStatus.empty
-                  ? l10n.recipeListInitial
-                  : l10n.recipeListNotFoundQuery(state.query),
-              style: textTheme.headline2,
-            )
-          ],
+        return Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Image.asset(Assets.logo),
+                SizedBox(height: size.width * 0.06),
+                Text(
+                  status == SearchStatus.empty
+                      ? l10n.recipeListInitial
+                      : l10n.recipeListNotFoundQuery(state.query),
+                  style: textTheme.headline2,
+                )
+              ],
+            ),
+          ),
         );
       },
     );

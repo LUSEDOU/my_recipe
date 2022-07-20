@@ -5,16 +5,6 @@ import 'package:recipes_repository/recipes_repository.dart';
 /// An abstract model of a RecipeRepository
 /// {@endtemplate}
 abstract class RecipeRepository {
-  /// {@macro recipe_repository}
-  const RecipeRepository({
-    required HttpRecipesApi httpRecipesApi,
-    required LocalStorageRecipesApi localStorageRecipesApi,
-  }) : _httpRecipesApi = httpRecipesApi,
-       _localStorageRecipesApi = localStorageRecipesApi;
-  
-  final HttpRecipesApi _httpRecipesApi;
-  final LocalStorageRecipesApi _localStorageRecipesApi;
-  
   /// Get a [SearchResult]
   Future<SearchResult> getRecipes(
     String query, {

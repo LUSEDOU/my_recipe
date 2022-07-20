@@ -59,17 +59,15 @@ class _RecipeOverviewView extends StatelessWidget {
           children: <Widget>[
             Expanded(
               flex: 2,
-              child: Container(
+              child: SizedBox(
                 width: size.width,
-                decoration: BoxDecoration(
+                child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
-                  color: theme.colorScheme.onTertiary,
-                ),
-                child: Image.network(
-                  recipe.image,
-                  fit: BoxFit.fitWidth,
-                  // TODO(LUSEDOU): ASK: Image's border radius
-                  // TODO(LUSEDOU): ASK: Zoom
+                  child: Image.network(
+                    recipe.image,
+                      fit: BoxFit.cover,
+                      // TODO(LUSEDOU): ASK: Zoom
+                  ),
                 ),
               ),
             ),
@@ -199,7 +197,7 @@ class _Poster extends StatelessWidget {
             ),
             SizedBox(height: size.height * 0.02),
             ListTile(
-              leading: CircleAvatar(
+              leading: ClipOval(
                 child: Image.network(user.thumbnail),
               ),
               title: Text(user.user),

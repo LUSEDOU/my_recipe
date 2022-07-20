@@ -430,7 +430,7 @@ packages:
     source: hosted
     version: "2.0.0"
   recipes_api:
-    dependency: transitive
+    dependency: "direct main"
     description:
       path: "packages/recipes_api"
       relative: true

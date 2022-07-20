@@ -36,35 +36,37 @@ class _RecipeListTile extends StatelessWidget {
     final textTheme = theme.textTheme;
     final size = MediaQuery.of(context).size;
 
-    return Padding(
-      padding: EdgeInsets.only(bottom: size.height * 0.02),
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: size.width * 0.02),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: ListTile(
-          leading: DecoratedBox(
-            decoration: BoxDecoration(
+    return Hero(
+      tag: recipe.id,
+      child: Padding(
+        padding: EdgeInsets.only(bottom: size.height * 0.02),
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: size.width * 0.02),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            color: theme.colorScheme.primary,
+          ),
+          child: ListTile(
+            leading: ClipRRect(
               borderRadius: BorderRadius.circular(4),
+              child: Image.network(recipe.thumbnail),
             ),
-            child: Image.network(recipe.thumbnail),
+            title: Text(
+              recipe.title,
+              style: textTheme.headline5,
+            ),
+            subtitle: Text(
+              recipe.cuisine.isNotEmpty 
+                  ? recipe.cuisine
+                  : '',
+              style: textTheme.bodyText2,
+            ),
+            onTap: () {
+              Navigator.of(context).push(
+                RecipeOverviewPage.route(recipe: recipe),
+              );
+            },
           ),
-          title: Text(
-            recipe.title,
-            style: textTheme.headline5,
-          ),
-          subtitle: Text(
-            recipe.cuisine.isNotEmpty 
-                ? recipe.cuisine
-                : '',
-            style: textTheme.bodyText2,
-          ),
-          onTap: () {
-            Navigator.of(context).push(
-              RecipeOverviewPage.route(recipe: recipe),
-            );
-          },
         ),
       ),
     );

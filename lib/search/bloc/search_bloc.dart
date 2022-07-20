@@ -35,6 +35,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         status: SearchStatus.loading,
         query: query,
         page: 1,
+        hasReachMax: false,
+        recipes: [],
+        message: '',
       ),
     );
 
@@ -50,8 +53,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       emit(
         state.copyWith(
           status: SearchStatus.failure,
-          message: error is SearchResultError
-              ? error.message
+          message: error is ApiException
+              ? '${error.title}: ${error.message}'
               : 'Something wrong happened',
         ),
       );

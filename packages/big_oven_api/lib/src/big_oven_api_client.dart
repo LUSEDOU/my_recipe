@@ -6,10 +6,16 @@ import 'package:recipes_api/recipes_api.dart';
 /// Dart Http client which wraps the [BigOven Api](https://api2.bigoven.com/)
 /// {@endtemplate}
 class BigOvenApiClient implements HttpRecipesApi{  
+  
   @override
   /// The BigOven url
   String get baseUrl => 'https://api.bigoven.com';
   
+  /// The dio request's options
+  Options get options => Options(
+    headers: headers,
+  );
+
   @override
   Map<String, dynamic> headers = {
     'Content-Type': 'application/json',
@@ -18,6 +24,7 @@ class BigOvenApiClient implements HttpRecipesApi{
   /// The Dio options
   BaseOptions get baseOptions => BaseOptions(
     baseUrl: baseUrl,
+    headers: headers,
   );
 
   /// The Dio package for https calls
@@ -25,15 +32,15 @@ class BigOvenApiClient implements HttpRecipesApi{
 
   @override
   /// A get request for the Http, which return a Response
-  Future<HttpResponse<String>> get(
+  Future<HttpResponse<dynamic>> get(
     String endPoint, {
     Map<String, dynamic>? queryParameters,
   }) async {
-
     try {
       final response = await dio.get<String>(
         endPoint,
         queryParameters: queryParameters,
+        options: options,
       );
 
       if (response.statusCode != 200 || response.data == null) {
