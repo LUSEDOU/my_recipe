@@ -1,4 +1,4 @@
-import 'package:big_oven_api/big_oven_api.dart';
+import 'package:recipes_repository/recipes_repository.dart';
 
 final mock = Mocks();
 

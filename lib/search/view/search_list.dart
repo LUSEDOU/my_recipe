@@ -1,8 +1,8 @@
-import 'package:big_oven_api/big_oven_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_recipes/recipe_overview/recipe_overview.dart';
 import 'package:my_recipes/search/search.dart';
+import 'package:recipes_repository/recipes_repository.dart';
 
 class RecipeList extends StatelessWidget {
   const RecipeList({super.key, required this.recipes});

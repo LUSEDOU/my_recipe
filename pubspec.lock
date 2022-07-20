@@ -429,10 +429,17 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
-  recipe_repository:
+  recipes_api:
+    dependency: transitive
+    description:
+      path: "packages/recipes_api"
+      relative: true
+    source: path
+    version: "1.0.0+1"
+  recipes_repository:
     dependency: "direct main"
     description:
-      path: "packages/recipe_repository"
+      path: "packages/recipes_repository"
       relative: true
     source: path
     version: "1.0.0+1"

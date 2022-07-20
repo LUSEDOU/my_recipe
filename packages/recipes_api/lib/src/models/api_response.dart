@@ -1,9 +1,9 @@
-/// {@template API_response}
+/// {@template api_response}
 /// A model of a response from the API API
 /// {@endtemplate}
-class APIResponse<T> {
-  /// {@macro API_response}
-  const APIResponse({
+abstract class ApiResponse<T> {
+  /// {@macro api_response}
+  const ApiResponse({
     required this.data,
   });
 

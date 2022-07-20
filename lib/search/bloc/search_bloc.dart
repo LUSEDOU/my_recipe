@@ -1,7 +1,7 @@
-import 'package:big_oven_api/big_oven_api.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:recipe_repository/recipe_repository.dart';
+import 'package:recipes_api/recipes_api.dart';
+import 'package:recipes_repository/recipes_repository.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 part 'search_event.dart';
@@ -39,7 +39,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     );
 
     try {
-      final result = await recipeRepository.getRecipes(query, 1);
+      final result = await recipeRepository.getRecipes(query);
       emit(
         state.copyWith(
           status: SearchStatus.success,
@@ -75,7 +75,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     );
 
     try {
-      final result = await recipeRepository.getRecipes(state.query, page);
+      final result 
+          = await recipeRepository.getRecipes(state.query, pages: page);
       emit(result.recipes.isEmpty
             ? state.copyWith(hasReachMax: true) 
             : state.copyWith(
@@ -87,8 +88,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       emit(
         state.copyWith(
           status: SearchStatus.failure,
-          message: error is SearchResultError
-              ? error.toString()
+          message: error is ApiException
+              ? '${error.title}: ${error.message}'
               : 'Something wrong happened',
         ),
       );

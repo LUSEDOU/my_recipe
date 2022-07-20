@@ -1,6 +1,6 @@
-import 'package:big_oven_api/big_oven_api.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:recipes_repository/recipes_repository.dart';
 
 part 'recipe_overview_state.dart';
 

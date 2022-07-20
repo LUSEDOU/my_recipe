@@ -1,4 +1,4 @@
-name: recipe_repository
+name: recipes_repository
 description: A Very Good Project created by Very Good CLI.
 version: 1.0.0+1
 publish_to: none
@@ -14,6 +14,8 @@ dependencies:
     sdk: flutter
   local_storage:
     path: ../local_storage
+  recipes_api:
+    path: ../recipes_api
 
 dev_dependencies:
   mocktail: ^0.3.0

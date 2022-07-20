@@ -21,8 +21,10 @@ dependencies:
   local_storage:
     path: packages/local_storage
   pull_to_refresh: ^2.0.0
-  recipe_repository:
-    path: packages/recipe_repository
+  recipes_api:
+    path: packages/recipes_api
+  recipes_repository:
+    path: packages/recipes_repository
   stream_transform: ^2.0.0
 
 dev_dependencies:

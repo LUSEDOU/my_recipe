@@ -1,5 +1,5 @@
-import 'package:big_oven_api/big_oven_api.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:recipes_repository/recipes_repository.dart';
 
 part 'search_result.freezed.dart';
 part 'search_result.g.dart';

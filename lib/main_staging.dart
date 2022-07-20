@@ -9,17 +9,15 @@ import 'package:big_oven_api/big_oven_api.dart';
 import 'package:local_storage/local_storage.dart';
 import 'package:my_recipes/app/app.dart';
 import 'package:my_recipes/bootstrap.dart';
-import 'package:recipe_repository/recipe_repository.dart';
+import 'package:recipes_repository/recipes_repository.dart';
 
 Future<void> main() async {
   final localStorage = LocalStorage();
   await localStorage.init();
 
-  final recipeRepository = RecipeRepository(
-    bigOvenApiClient: BigOvenApiClient(
-      apiKey: '',
-    ),
-    localStorage: localStorage,
+  final recipeRepository = HttpRecipesRepository(
+    httpRecipesApi: BigOvenApiClient(),
+    localStorageRecipesApi: localStorage,
   );
 
   await bootstrap(() => App(recipeRepository: recipeRepository));

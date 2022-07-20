@@ -1,12 +1,12 @@
 // coverage: ignore_for_file
 // ignore_for_file: prefer_if_elements_to_conditionals_expressions
 
-import 'package:big_oven_api/big_oven_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_recipes/l10n/l10n.dart';
 import 'package:my_recipes/recipe_overview/recipe_overview.dart';
 import 'package:my_recipes/utils/mock_recipe.dart';
+import 'package:recipes_repository/recipes_repository.dart';
 
 class RecipeOverviewPage extends StatelessWidget {
   const RecipeOverviewPage({super.key});

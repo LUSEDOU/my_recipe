@@ -1,89 +1,56 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:big_oven_api/big_oven_api.dart';
 import 'package:dio/dio.dart';
 import 'package:recipes_api/recipes_api.dart';
 
 /// {@template big_oven_api_client}
-/// Dart API client which wraps the [BigOven Api](https://api2.bigoven.com/)
+/// Dart Http client which wraps the [BigOven Api](https://api2.bigoven.com/)
 /// {@endtemplate}
-class BigOvenApiClient {
-  /// {@macro big_oven_api_client}
-  BigOvenApiClient({
-    Dio? dio, 
-    this.apiKey = '?',
-  })  : _dio = dio ?? Dio(BaseOptions(baseUrl: _baseURL));
+class BigOvenApiClient implements HttpRecipesApi{  
+  @override
+  /// The BigOven url
+  String get baseUrl => 'https://api.bigoven.com';
   
-  final Dio _dio;
+  @override
+  Map<String, dynamic> headers = {
+    'Content-Type': 'application/json',
+  };
 
-  /// The API_key
-  final String apiKey;
+  /// The Dio options
+  BaseOptions get baseOptions => BaseOptions(
+    baseUrl: baseUrl,
+  );
 
-  static const _baseURL = 'https://api.bigoven.com';
-  static const _recipeEndPoint = '/recipes';
-  static const _headers = {'Content-Type': 'application/json'};
+  /// The Dio package for https calls
+  Dio get dio => Dio(baseOptions);
 
-  /// Finds a [SearchResult] `/recipes?title_kw=(query)&pg=(page)&rpp=(rpp)&api_key=(apiKey)`.
-  Future<SearchResult> search({
-    required String query,
-    int page = 1,
-    int rpp = 1,
-  }) async {
-    final queryParameters = <String, String>{
-      'title_kw': query, 'pg': '$page', 'rpp': '$rpp', 'api_key': apiKey
-    };
-    
-    final response = await _dio.get<String>(
-      _recipeEndPoint,
-      queryParameters: queryParameters,
-      options: Options(headers: _headers),
-    );
-    log('Results gotten');
-    final results 
-      = json.decode(response.data.toString()) as Map<String, dynamic>;
-    log('Decode gotten');
-    if (response.statusCode != 200) {
-      log('200 error');
-      throw SearchResultError(
-        page: page, 
-        query: query, 
-        message: response.statusMessage.toString(),
-      );
-    }
-
-    final a = SearchResult.fromJson(results);
-    log('AAAAAAAAAAAAAAAAAAAAAA');
-    return a;
-  }
-
-  /// A get
-  Future<APIResponse<dynamic>> get(
+  @override
+  /// A get request for the Http, which return a Response
+  Future<HttpResponse<String>> get(
     String endPoint, {
     Map<String, dynamic>? queryParameters,
   }) async {
 
     try {
-      final response = await _dio.get<String>(
+      final response = await dio.get<String>(
         endPoint,
         queryParameters: queryParameters,
       );
 
-      if (response.statusCode != 200) {
-        throw APIException(
+      if (response.statusCode != 200 || response.data == null) {
+        throw HttpException(
           title: 'BigOvenApiException',
-          message: response.statusMessage 
-              ?? 'An unknown exception ocurred',
+          message: response.statusMessage,
         );
       }
 
-      return APIResponse(
-        data: response,
+      final data = response.data.toString();
+
+      return HttpResponse(
+        data: data,
       );
 
     } catch (e) {
-      throw APIException(
-        title: 'HttpException',
+      throw HttpException(
         message: e.toString(),
       );
     }

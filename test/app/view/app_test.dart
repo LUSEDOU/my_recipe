@@ -9,12 +9,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:my_recipes/app/app.dart';
 import 'package:my_recipes/search/search.dart';
-import 'package:recipe_repository/recipe_repository.dart';
+import 'package:recipes_repository/recipes_repository.dart';
 
-class MockRecipeRepository extends Mock implements RecipeRepository {}
+class MockRecipeRepository extends Mock implements HttpRecipesRepository {}
 
 void main() {
-  late RecipeRepository recipeRepository;
+  late HttpRecipesRepository recipeRepository;
 
   setUp(() {
     recipeRepository = MockRecipeRepository();

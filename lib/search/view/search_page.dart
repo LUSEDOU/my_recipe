@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_recipes/l10n/l10n.dart';
 import 'package:my_recipes/search/search.dart';
-import 'package:recipe_repository/recipe_repository.dart';
+import 'package:recipes_repository/recipes_repository.dart';
 
 class SearchPage extends StatelessWidget {
   const SearchPage({super.key});

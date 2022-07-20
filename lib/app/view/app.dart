@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_recipes/l10n/l10n.dart';
 import 'package:my_recipes/search/search.dart';
 import 'package:my_recipes/utils/theme.dart';
-import 'package:recipe_repository/recipe_repository.dart';
+import 'package:recipes_repository/recipes_repository.dart';
 
 class App extends StatelessWidget {
   const App({super.key, required this.recipeRepository});
