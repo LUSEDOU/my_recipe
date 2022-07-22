@@ -83,11 +83,13 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
               status: SearchStatus.success,
               hasReachMax: true,
               isCaching: true,
+              page: page + 1,
           )
           : state.copyWith(
               status: SearchStatus.success,
               recipes: List.of(state.recipes)..addAll(result.recipes),
               isCaching: true,
+              page: page + 1,
           ), 
       );
     } catch (error) {

@@ -18,12 +18,25 @@ class RecipeList extends StatelessWidget {
 
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
+        if (state.status == SearchStatus.success) {
+          if (controller.headerStatus == RefreshStatus.refreshing) {
+            imageCache.clear();
+            controller.refreshCompleted();
+          }
+
+          if (controller.footerStatus == LoadStatus.loading) {
+            state.hasReachMax
+              ? controller.loadNoData()
+              : controller.loadComplete();
+          } 
+          context.read<SearchBloc>().add(const ImageCached());
+        }
+
         if (state.status == SearchStatus.failure) {
           controller
               ..refreshFailed()
               ..loadFailed();
         }
-
         return SmartRefresher(
           controller: controller,
           enablePullUp: true,
@@ -36,16 +49,34 @@ class RecipeList extends StatelessWidget {
           child: ListView.separated(
             separatorBuilder: (context, index) 
                 => SizedBox(height: size.height * 0.02),
-            itemCount: recipes.length,
+            itemCount: 
+                context.select((SearchBloc bloc) => bloc.state.hasReachMax)
+                    ? recipes.length
+                    : recipes.length + 1,
             itemBuilder: (BuildContext context, int index) {
-              return _RecipeTile(
-                recipe: recipes[index],
-                recipeIndex: index,
-              );
+              return index >= state.recipes.length
+                ? _BottomLoader()
+                : _RecipeTile(
+                    recipe: recipes[index],
+                    recipeIndex: index,
+                  );
             },
           ),
         );
       },
+    );
+  }
+}
+
+class _BottomLoader extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    context.read<SearchBloc>().add(const ScrollDown());
+    return Center(
+      child: CircularProgressIndicator(
+        strokeWidth: 2,
+        color: Theme.of(context).colorScheme.onPrimary,
+      ),
     );
   }
 }
@@ -78,13 +109,15 @@ class _RecipeTile extends StatelessWidget {
             child: CachedNetworkImage(
               imageUrl: recipe.thumbnail,
               fit: BoxFit.cover,
-              progressIndicatorBuilder: (context, url, progress) =>
-                Center(
-                child: CircularProgressIndicator(
-                  color: theme.colorScheme.onPrimary,
-                  strokeWidth: 1,
-                ),
-              ),
+              width: size.width * 0.17,
+              height: size.height * 0.2,
+              progressIndicatorBuilder: (context, url, progress) => 
+                  Center(
+                    child: CircularProgressIndicator(
+                      color: theme.colorScheme.onPrimary,
+                      strokeWidth: 3,
+                    ),
+                  ),
             ),
           ),
           title: Text(
