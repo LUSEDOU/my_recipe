@@ -7,11 +7,20 @@ part 'recipe_overview_state.dart';
 class RecipeOverviewCubit extends Cubit<RecipeOverviewState> {
   RecipeOverviewCubit({
     required Recipe recipe,
-  }) : super(RecipeOverviewState(recipe: recipe));
+    required int recipeIndex,
+  }) : super(
+      RecipeOverviewState(
+        recipe: recipe,
+        recipeIndex: recipeIndex,
+      ),
+    );
 
   Future<void> init() async {
+    emit(state.copyWith(status: RecipeOverviewStatus.loading));
+
     await Future<dynamic>.delayed(const Duration(milliseconds: 500));
 
     emit(state.copyWith(status: RecipeOverviewStatus.success));
   }
+
 }

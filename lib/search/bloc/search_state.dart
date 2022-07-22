@@ -10,6 +10,7 @@ class SearchState extends Equatable {
     this.recipes = const [],
     this.message = '',
     this.hasReachMax = false,
+    this.isCaching = false,
   });
   
   final SearchStatus status;
@@ -17,6 +18,7 @@ class SearchState extends Equatable {
   final String message;
   final int page;
   final bool hasReachMax;
+  final bool isCaching;
   final List<Recipe> recipes;
 
   SearchState copyWith({
@@ -25,6 +27,7 @@ class SearchState extends Equatable {
     String? message,
     int? page,
     bool? hasReachMax,
+    bool? isCaching,
     List<Recipe>? recipes,
   }) {
     return SearchState(
@@ -33,6 +36,7 @@ class SearchState extends Equatable {
       message: message ?? this.message,
       page: page ?? this.page,
       hasReachMax: hasReachMax ?? this.hasReachMax,
+      isCaching: isCaching ?? this.isCaching,
       recipes: recipes ?? this.recipes,
     );
   }
@@ -40,5 +44,5 @@ class SearchState extends Equatable {
 
   @override
   List<Object> get props 
-    => [status, query, page, recipes, hasReachMax, message];
+    => [status, query, page, recipes, hasReachMax, isCaching, message];
 }

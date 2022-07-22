@@ -19,6 +19,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     on<ScrollDown>(_onScrollDown);
     on<Refresh>(_onRefresh);
     on<DeleteQuery>(_onDeleteQuery);
+    on<ImageCached>(_onImageCached);
   }
 
   final RecipeRepository recipeRepository;
@@ -46,6 +47,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           status: SearchStatus.success,
           recipes: result.recipes,
           hasReachMax: result.recipes.length == result.recipesCount,
+          isCaching: true,
         ),
       );
     } catch (error) {
@@ -80,10 +82,12 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           ? state.copyWith(
               status: SearchStatus.success,
               hasReachMax: true,
+              isCaching: true,
           )
           : state.copyWith(
               status: SearchStatus.success,
               recipes: List.of(state.recipes)..addAll(result.recipes),
+              isCaching: true,
           ), 
       );
     } catch (error) {
@@ -119,6 +123,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           status: SearchStatus.success,
           recipes: result.recipes,
           hasReachMax: result.recipes.length == result.recipesCount,
+          isCaching: true,
         ),
       );
     } catch (error) {
@@ -138,5 +143,12 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     Emitter<SearchState> emit,
   ) {
     emit(const SearchState());
+  }
+
+  void _onImageCached(
+    ImageCached event,
+    Emitter<SearchState> emit,
+  ) {
+    emit(state.copyWith(isCaching: false));
   }
 }

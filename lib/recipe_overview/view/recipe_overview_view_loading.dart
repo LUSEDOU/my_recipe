@@ -45,7 +45,7 @@ class RecipeOverviewViewLoading extends StatelessWidget {
           Row(
             children: [
               CircleAvatar(
-                backgroundColor: theme.colorScheme.onPrimary,
+                backgroundColor: theme.hintColor,
                 radius: 30,
               ),
               SizedBox(width: size.width * 0.04),

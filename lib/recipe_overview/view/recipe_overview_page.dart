@@ -11,13 +11,17 @@ import 'package:recipes_repository/recipes_repository.dart';
 class RecipeOverviewPage extends StatelessWidget {
   const RecipeOverviewPage({super.key});
 
-  static Route<void> route({required Recipe recipe}) {
+  static Route<void> route({
+    required Recipe recipe,
+    required int recipeIndex,
+  }) {
     return MaterialPageRoute(
       fullscreenDialog: true,
       builder: (context) => BlocProvider(
         create: (context) => RecipeOverviewCubit(
           recipe: recipe,
-        ),
+          recipeIndex: recipeIndex,
+        )..init(),
         child: _RecipeOverviewView(),
       ),
     );
@@ -28,6 +32,7 @@ class RecipeOverviewPage extends StatelessWidget {
     return BlocProvider(
         create: (context) => RecipeOverviewCubit(
           recipe: Mocks.recipeNoSubCategoryNoUser,
+          recipeIndex: 1,
         ),
         child: _RecipeOverviewView(),
       );
@@ -38,6 +43,8 @@ class _RecipeOverviewView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final recipeIndex 
+      = context.select((RecipeOverviewCubit cubit) => cubit.state.recipeIndex);
 
     return Scaffold(
       appBar: AppBar(
@@ -50,9 +57,16 @@ class _RecipeOverviewView extends StatelessWidget {
         padding: EdgeInsets.all(size.width * 0.05),
         child: BlocBuilder<RecipeOverviewCubit, RecipeOverviewState>(
           builder: (context, state) {
+            if (state.status == RecipeOverviewStatus.initial) {
+              Navigator.of(context).pop();
+            }
+
             if(state.status == RecipeOverviewStatus.loading) {
               context.read<RecipeOverviewCubit>().init();
-              return const RecipeOverviewViewLoading();
+              return  Hero(
+                tag: recipeIndex,
+                child: const RecipeOverviewViewLoading(),
+              );
             }
 
             return const RecipeOverviewViewSuccess();

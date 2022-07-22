@@ -10,6 +10,7 @@ ThemeData _buildMyRecipeTheme() {
     primaryColor: color.primary.tone1,
     backgroundColor: color.primary.tone2,
     hintColor: color.primary.tone4,
+    hoverColor: color.primary.tone3,
 
     colorScheme: base.colorScheme.copyWith(
       primary: color.primary.tone1,

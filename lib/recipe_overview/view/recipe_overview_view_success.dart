@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_recipes/l10n/l10n.dart';
@@ -22,17 +23,21 @@ class RecipeOverviewViewSuccess extends StatelessWidget {
       children: <Widget>[
         Expanded(
           flex: 2,
-          child: Hero(
-            tag: recipe.id,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
             child: ZoomOverlay(
               twoTouchOnly: true,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.network(
-                  recipe.image,
-                  fit: BoxFit.cover,
-                  width: size.width,
-                ),
+              child: CachedNetworkImage(
+                imageUrl: recipe.image,
+                fit: BoxFit.cover,
+                width: size.width,
+                progressIndicatorBuilder: (context, url, progress) => 
+                  Center(
+                    child: CircularProgressIndicator(
+                      color: theme.colorScheme.onPrimary,
+                      strokeWidth: 3,
+                    ),
+                  ),
               ),
             ),
           ),

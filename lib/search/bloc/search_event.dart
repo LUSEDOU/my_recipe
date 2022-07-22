@@ -33,3 +33,10 @@ class DeleteQuery extends SearchEvent{
   @override
   List<Object> get props => [];
 }
+
+class ImageCached extends SearchEvent{
+ const ImageCached();
+
+  @override
+  List<Object> get props => []; 
+}
