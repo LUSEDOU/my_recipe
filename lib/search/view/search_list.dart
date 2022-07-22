@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:my_recipes/recipe_overview/recipe_overview.dart';
 import 'package:my_recipes/search/search.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -20,7 +21,9 @@ class RecipeList extends StatelessWidget {
       builder: (context, state) {
         if (state.status == SearchStatus.success) {
           if (controller.headerStatus == RefreshStatus.refreshing) {
-            imageCache.clear();
+            DefaultCacheManager().emptyCache();
+            
+            imageCache..clear()..clearLiveImages();
             controller.refreshCompleted();
           }
 
@@ -107,6 +110,7 @@ class _RecipeTile extends StatelessWidget {
           leading: ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: CachedNetworkImage(
+              key: UniqueKey(),
               imageUrl: recipe.thumbnail,
               fit: BoxFit.cover,
               width: size.width * 0.17,
