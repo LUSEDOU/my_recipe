@@ -67,6 +67,7 @@ class MockRecipe {
     this.title = 'Gelfite Fish 711', 
     this.image = 'https://redirect.bigoven.com/pics/rs/256/gefilte-fish.jpg', 
     this.thumbnail = 'https://redirect.bigoven.com/pics/rs/120/gefilte-fish.jpg', 
+    this.web = 'https://redirect.bigoven.com/pics/rs/256/gefilte-fish.jpg',
     this.cuisine = 'American', 
     this.category = 'Main Dish', 
     this.subCategory = 'Fish and Shellfish',
@@ -79,6 +80,7 @@ class MockRecipe {
   final String title;
   final String image;
   final String thumbnail;
+  final String web;
   final String cuisine;
   final String category;
   final String subCategory;
@@ -91,6 +93,7 @@ class MockRecipe {
       title: title, 
       image: image, 
       thumbnail: thumbnail, 
+      web: web,
       cuisine: cuisine, 
       category: category, 
       subcategory: subCategory,

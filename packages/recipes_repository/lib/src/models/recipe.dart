@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:recipes_repository/recipes_repository.dart';
 
@@ -11,13 +12,14 @@ part 'recipe.g.dart';
 /// Could contains [cuisine], [category], [subcategory]
 /// and [user] if aren't null.
 /// {@endtemplate}
-class Recipe {
+class Recipe extends Equatable{
   /// {@macro recipe}
   const Recipe({
     required this.id,
     required this.title,
     required this.image,
     required this.thumbnail,
+    required this.web,
     this.cuisine = '',
     this.category = '',
     this.subcategory = '',
@@ -40,6 +42,10 @@ class Recipe {
   @JsonKey(name: 'ImageURL')
   final String image;
 
+  /// The image's url of the recipe's photo in
+  @JsonKey(name: 'WebURL')
+  final String web;
+
   /// The image's url of the recipe's photo in 120 x 120 px
   @JsonKey(name: 'ImageURL120')
   final String thumbnail;
@@ -59,4 +65,8 @@ class Recipe {
   /// The recipe's owner. Can be null.
   @JsonKey(name: 'Poster')
   final User user;
+
+  @override
+  List<Object> get props 
+      => [id, title, image, thumbnail, cuisine, category, subcategory, user];
 }

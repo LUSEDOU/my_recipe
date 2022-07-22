@@ -50,7 +50,7 @@ class HttpRecipesRepository implements RecipeRepository{
       queryParameters: queryParameters,
     );
 
-    if (forceRefresh || cachedResponseData != null) {
+    if (!forceRefresh && cachedResponseData != null) {
       final dataJson
           = jsonDecode(cachedResponseData as String) as Map<String, dynamic>;
       

@@ -10,6 +10,7 @@ dependencies:
   big_oven_api:
     path: packages/big_oven_api
   bloc: ^8.0.3
+  cached_network_image: ^3.2.1
   equatable: ^2.0.3
   flutter:
     sdk: flutter
@@ -20,12 +21,15 @@ dependencies:
   intl: ^0.17.0
   local_storage:
     path: packages/local_storage
+  pinch_zoom: ^1.0.0
   pull_to_refresh: ^2.0.0
   recipes_api:
     path: packages/recipes_api
   recipes_repository:
     path: packages/recipes_repository
   stream_transform: ^2.0.0
+  url_launcher: ^6.1.5
+  zoom_pinch_overlay: ^1.2.0
 
 dev_dependencies:
   bloc_test: ^9.0.3

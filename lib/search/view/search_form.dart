@@ -14,8 +14,11 @@ class SearchForm extends StatelessWidget {
 
     return TextField(
       controller: _textController,
-      onChanged: (text) =>
-          context.read<SearchBloc>().add(QueryChanged(query: text)),
+      onChanged: (text) {
+        text.isEmpty
+          ? context.read<SearchBloc>().add(const DeleteQuery())
+          : context.read<SearchBloc>().add(QueryChanged(query: text));
+      },
       autocorrect: false,
       textAlignVertical: TextAlignVertical.center,
       cursorColor: theme.colorScheme.secondary,
@@ -31,7 +34,7 @@ class SearchForm extends StatelessWidget {
             return IconButton(
               onPressed: () {
                 _textController.clear();
-                context.read<SearchBloc>().add(const Refresh());
+                context.read<SearchBloc>().add(const DeleteQuery());
               },
               icon: const Icon(Icons.cancel_rounded),
             );

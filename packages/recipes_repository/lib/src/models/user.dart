@@ -10,7 +10,7 @@ part 'user.g.dart';
 class User {
   /// {@macro user}
   const User({
-    required this.user,
+    this.user = 'This user was eliminated',
     required this.thumbnail,
   });
 

@@ -18,7 +18,7 @@ class SearchBody extends StatelessWidget {
       builder: (context, state) {
         final status = state.status;
 
-        if (status == SearchStatus.success) {
+        if (status == SearchStatus.success && state.recipes.isNotEmpty) {
           return RecipeList(
             recipes: state.recipes,
           );

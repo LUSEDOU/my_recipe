@@ -16,8 +16,9 @@ EventTransformer<Event> debounce<Event>(Duration duration) {
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   SearchBloc({required this.recipeRepository}) : super(const SearchState()) {
     on<QueryChanged>(_onQueryChanged, transformer: debounce(_duration));
-    on<PageChanged>(_onPageChanged);
+    on<ScrollDown>(_onScrollDown);
     on<Refresh>(_onRefresh);
+    on<DeleteQuery>(_onDeleteQuery);
   }
 
   final RecipeRepository recipeRepository;
@@ -31,61 +32,21 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     if (query.isEmpty) return;
 
     emit(
-      state.copyWith(
+      SearchState(
         status: SearchStatus.loading,
         query: query,
-        page: 1,
-        hasReachMax: false,
-        recipes: [],
-        message: '',
-      ),
-    );
-
-    try {
-      final result = await recipeRepository.getRecipes(query);
-      emit(
-        state.copyWith(
-          status: SearchStatus.success,
-          recipes: result.recipes,
-        ),
-      );
-    } catch (error) {
-      emit(
-        state.copyWith(
-          status: SearchStatus.failure,
-          message: error is ApiException
-              ? '${error.title}: ${error.message}'
-              : 'Something wrong happened',
-        ),
-      );
-    }
-  }
-
-  Future<void> _onPageChanged(
-    PageChanged event,
-    Emitter<SearchState> emit,
-  ) async {
-    if (state.hasReachMax) return;
-
-    final page = event.page;
-    if (page == state.page || page == 1) return;
-
-    emit(
-      state.copyWith(
-        status: SearchStatus.loading,
-        page: page,
       ),
     );
 
     try {
       final result 
-          = await recipeRepository.getRecipes(state.query, pages: page);
-      emit(result.recipes.isEmpty
-            ? state.copyWith(hasReachMax: true) 
-            : state.copyWith(
-                status: SearchStatus.success,
-                recipes: List.of(state.recipes)..addAll(result.recipes),
-              ),
+          = await recipeRepository.getRecipes(query);
+      emit(
+        state.copyWith(
+          status: SearchStatus.success,
+          recipes: result.recipes,
+          hasReachMax: result.recipes.length == result.recipesCount,
+        ),
       );
     } catch (error) {
       emit(
@@ -99,10 +60,83 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     }
   }
 
-  void _onRefresh (
+  Future<void> _onScrollDown(
+    ScrollDown event,
+    Emitter<SearchState> emit,
+  ) async {
+    if (state.hasReachMax) return;
+
+    final page = state.page;
+
+    try {
+      final result 
+          = await recipeRepository.getRecipes(state.query, pages: page + 1);
+
+      final hasReachMax 
+          = state.recipes.length + result.recipes.length == result.recipesCount;
+
+      emit(
+        hasReachMax
+          ? state.copyWith(
+              status: SearchStatus.success,
+              hasReachMax: true,
+          )
+          : state.copyWith(
+              status: SearchStatus.success,
+              recipes: List.of(state.recipes)..addAll(result.recipes),
+          ), 
+      );
+    } catch (error) {
+      emit(
+        state.copyWith(
+          status: SearchStatus.failure,
+          message: error is ApiException
+              ? '${error.title}: ${error.message}'
+              : 'Something wrong happened',
+        ),
+      );
+    }
+  }
+
+  Future<void> _onRefresh (
     Refresh event,
+    Emitter<SearchState> emit,
+  ) async {
+    final query = state.query;
+
+    emit(
+      SearchState(
+        status: SearchStatus.loading,
+        query: query,
+      ),
+    );
+
+    try {
+      final result 
+          = await recipeRepository.getRecipes(query, forceRefresh: true);
+      emit(
+        state.copyWith(
+          status: SearchStatus.success,
+          recipes: result.recipes,
+          hasReachMax: result.recipes.length == result.recipesCount,
+        ),
+      );
+    } catch (error) {
+      emit(
+        state.copyWith(
+          status: SearchStatus.failure,
+          message: error is ApiException
+              ? '${error.title}: ${error.message}'
+              : 'Something wrong happened',
+        ),
+      );
+    }
+  } 
+
+  void _onDeleteQuery(
+    DeleteQuery event,
     Emitter<SearchState> emit,
   ) {
     emit(const SearchState());
-  } 
+  }
 }
